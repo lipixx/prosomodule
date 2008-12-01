@@ -1,0 +1,99 @@
+#MODUL 2 - EL PAGÈS
+---------------------------------------------------------------
+int alloc_chrdev_region(dev_t *dev, unsigned int firstminor,
+			unsigned int count, char *name)
+	*dev = dev_t en que es guardarà major i minor allocatats dinàmicament
+	firstminor = primer minor que volem obtenir (usually 0)
+	count = num de dispositius que volem allocatar
+	*name = nom del dispositiu a crear
+	return: 0 si s'ha pogut allocar, -1 sino,
+
+char lock;
+int proces_monitorizat;
+int sys_call_monitorizat;
+
+extern sysc_info sysc_info_table[];
+extern struct t_info;
+extern pids_monitoritzats[];
+DEV:
+{
+	__init init_module()
+	{
+		struct dev_t * maj_min; <--- HAN DE SER GLOBALS! (s'empra a exit)
+		struct cdev * new_dev;  <---
+		struct file_operations file_ops =
+			{
+			owner: THIS_MODULE,
+			read: sys_read_dev,
+			open: sys_open_dev,
+			release: sys_release_dev,
+			ioctl: sys_ioctl_dev,
+			}
+		alloc_chrdev_region(maj_min, 0, 1, "/dev/pages");
+		register_chrdev_region(maj_min,1,"/dev/pages");
+		new_dev = cdev_alloc();
+		new_dev->owner = THIS_MODULE;
+		new_dev->ops = file_ops;
+		c_dev_add(new_dev,maj_min,1);
+		lock = 0;		
+	}
+
+	__exit exit_module()
+	{
+		unregister_chrdev_region(maj_min, 1);
+		cdev_del(new_dev);
+	}
+
+	sys_open_dev(){
+	nomes pot fer un open el root
+	???fa un lock del dispositiu (lock = 1)
+	}
+	sys_read_dev(){
+	retorna estadistiques de la sys_call que s'està monitoritzant
+	}
+	sys_release_dev(){
+	retorna estadistiques del pid que s'està monitoritzant
+	???fa un unlock del dispositiu (lock = 0)
+	}
+	sys_ioctl_dev(){
+	set proces_monitorizat,
+	set sys_call_monitoritzat,
+
+	reset_valors (proces_monitorizat)
+		{
+		   Cercar funcio que faixi açò:
+			((struct union estadistiques) get_thread_info(proces_monitorizat))-> t_info.reset();
+			(o fer l'altre sistema de sumar sizeof(thread_info)...)
+		}
+
+	reset_tots_valors
+		{
+		   Igual que l'anterior pero que recorri la taula pids_monitoritzats[]
+		}
+	activar_sys_call(int kina)
+		{
+			Vigilar si es -1, bucle per totes
+		}
+	desactivar_sys_call(int kina)
+		{
+			Vigilar si es -1, bucle per totes
+		}
+}
+
+
+user.c ()
+{
+char * buffer;
+int fd = open("/dev/pages", O_RDWR);
+read (fd, buffer, 256);
+
+
+}
+
+
+#Improvements && Comments && Dubtes
+------------------------------------
+read:
+???El nombre de bytes a llegir serà el mínim entre s i sizeof(struct t_info).
+???Lock a open i a release
+
