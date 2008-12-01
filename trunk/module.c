@@ -3,6 +3,8 @@
 #include <linux/init.h>
 #include <linux/moduleparam.h>
 
+int pid = 1;
+module_param(pid,int,0);
 MODULE_LICENSE("GPL");
 MODULE_PARAM_DESC(pid, "Process ID to monitor (def 1)");
 MODULE_AUTHOR("Felip Moll <lipixx@gmail.com>, Josep Marti <one.neuron@gmail.com>");
