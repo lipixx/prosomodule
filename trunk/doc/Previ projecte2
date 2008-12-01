@@ -1,0 +1,93 @@
+#MODUL 1 - HORTAL
+---------------------------------------------------------------
+*struct sysc_info {
+	int num_crides;
+	int num_fallides;
+	int num_satisfact;
+	int temps_execucio;  (ES POT FER LA MITJA)
+	}
+
+*Crear una taula de pids_monitoritzats[] o una estructura similar.
+*Crear una taula sysc_info_table[N_CRIDES_A_MONITORIZAR] de tipus sysc_info, que dirà quantes
+crides s'han fet a cada una.
+*Fer Constants de les crides a monit.
+
+*Haurem de fer un export de les estructures perquè puguin ser accedides des de
+altres mòduls.
+
+1. Crear les funcions especifiques que s'han de monitoritzar:
+	sys_open
+	sys_close
+	sys_write
+	sys_lseek
+	sys_clone
+	?*sys_exit
+	?*sys_kill
+   A cada funció:
+		0. Comprovar que current()->pid == current()->t_info.pid; {KSYM:get_task_pid?}
+		   if (no ho és) {
+				   current()->t_info.reset();
+				   afegir a la taula de pids monitorizats;
+				   treure l'antic pid de la taula de pids monitoritzads; 
+				 }
+		1. Agafar el temps (proso_get_time)
+		2. Fer el trap al sys_call original
+		3. Agafar el temps i fer la resta (proso_get_cycles)
+		4. Actualitzar les estadistiques a un UNION de thread_info + estadistiques
+			· struct t_info {
+					int pid; (Per si sigkill)
+					int num_entrades;
+					int num_sortides_ok;
+					int num_sortides_error;
+					unsigned long long durada_total;
+					}
+		i també actualitzar la taula de info de sys_calls sysc_info_table[index_crida_actual]
+		de nº de crides fetes.
+		5. retornar
+
+2. Modificar la taula de sys_call_table del sistema perque les sys_calls originals esmentades
+apuntint a les noves. Haurem de guardar les @sys_call original A UNA TAULA sys_call_table_original[].
+Les noves estaran dins sys_call_table_locals[]
+
++++++++++++++++
+=======Manera1=======
+3. Fer struct union de thread_info+estadistiques.
+
+struct union unio_tinfo_est {
+	struct thread_info * info_th;
+	struct t_info *	estadistiques;
+}
+S'emprarà de sa següent manera:
+struct thread_info * info_th = get_thread_info();  <------------Union temporal
+struct unio_tinfo_est * unio_actual = (unio_tinfo_est) info_th;
+unio_actual->estadistiques.pid = xxx...
+========Manera2=======
+??(estadistiques = get_thread_info() + sizeof(thread_info);  <--------Fer union es = aso)
++++++++++++++++
+
+4. Module exit: Haurem de reestablir les @sys_call originals i fer un printk de les estad.
+del pid passat per paràmetre al fer insmod (default = 1).
+
+5. Fer les funcions:
+	export activar_monitoritzacio(int quina_crida)
+	{
+		intercepta les crides;
+	}
+
+	export desactivar_monitoritzacio(int quina_crida)
+	{
+		desintercepta les crides;
+	}
+
+#Improvements && Comments && Questions
+--------------------------------------
+- Si s'envia un sigkill i queda sa informació estadística antiga, hi ha una possibilitat
+remota (més fàcil que et caigui un llamp) que es torni a assignar un procés amb el mateix
+PID. (Comprovar nom de procés¿)
+- Millora excepcional de rendiment: Cerca i inserció a sa taula de pids monitoritzats amb
+algoritme eficient (separacio en func. de sa congruencia %2 i inserció mitjançant ord. per inserció).
+- SIGKILL i SIGTERM fa un exit() al sortir (term voluntari)? 
+Si és així interceptarem només exit per eliminar el pid de la 
+taula de pids monitoritzats. Si SIGKILL no fa exit, també interceptarem KILL 
+(cas sigkill).
+- Si sa pila s'incrementa fins a arribar a espai de estadistiques... ¿¿comprovar esp??
