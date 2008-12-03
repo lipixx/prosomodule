@@ -34,7 +34,7 @@ static inline unsigned long long proso_get_cycles (void) {
   inici = proso_get_cycles();			\
   resultat = CRIDAR(NCRIDA,__VA_ARGS__);	\
   final = proso_get_cycles();			\
-  fin_est(resultat,tinfo_est,NCRIDA);		\
+  fin_est(resultat,tinfo_est,inici,final,NCRIDA); \
   return resultat;				})
 
 
