@@ -88,7 +88,7 @@ sys_open_local(const char __user * filename, int flags, int mode)
   mi_th_info = current_thread_info();
   tinfo_est = (struct th_info_est * ) mi_th_info;
   
-  pid = pid_nr(current_thread_info()->task->pid);
+  pid = task_pid_nr_ns(current, current->nsproxy->pid_ns);
   
   if (pid != tinfo_est->estadistiques->pid) reset_info(pid, tinfo_est);  
   
