@@ -92,15 +92,15 @@ inline void fin_est(int resultat, struct th_info_est * tinfo_est, int NCRIDA)
   if(resultat==0)					
     {							
       tinfo_est->estadistiques->num_sortides_ok++;			
-      sysc_info_table[OPEN]->sortides_satisfactories++;	
+      sysc_info_table[OPEN].num_satisfactories++;	
     } 
   else 
     {
       tinfo_est->estadistiques->num_sortides_error++;				
-      sysc_info_table[OPEN].num_sortides_error++;			
+      sysc_info_table[OPEN].num_fallides++;			
     }		
   tinfo_est->estadistiques->durada_total += (final-inici);			
-  sysc_info_table[OPEN]->temps_execucio += (final-inici);
+  sysc_info_table[OPEN].temps_execucio += (final-inici);
 }
 
 int
