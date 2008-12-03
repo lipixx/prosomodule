@@ -42,7 +42,7 @@ struct sysc_info{
 int nou_pid; /* Indica la posicio de la taula pids_monitoritzats on hem de posar el proxim PID */
 int pids_monitoritzats[MAX_PIDS_MONITORITZATS];
 
-sysc_info sysc_info_table[N_CRIDES_A_MONITORITZAR];
+struct sysc_info sysc_info_table[N_CRIDES_A_MONITORITZAR];
 
 struct th_info_est
 {
@@ -62,7 +62,7 @@ static void __exit vender_huerto_exit(void);
 int sys_open_local(const char __user * filename, int flags, int mode);
 void reset_info(int pid, struct th_info_est * tinfo_est);
 inline void init_est(struct th_info_est * tinfo_est, struct thread_info * mi_th_info,int NCRIDA);
-inline fin_est(int resultat, th_info_est tinfo_est, int NCRIDA);
+inline fin_est(int resultat, struct th_info_est tinfo_est, int NCRIDA);
 int sys_open_local(const char __user * filename, int flags, int mode);
 int sys_close_local(unsigned int fd);
 int sys_write_local(unsigned int fd, const char __user * buf, size_t count);
