@@ -81,13 +81,13 @@ inline void init_est(struct th_info_est * tinfo_est, struct thread_info * mi_th_
   int pid;
   mi_th_info = current_thread_info();
   tinfo_est = (struct th_info_est*) mi_th_info;
-  pid = (int)current_thread_info()->task->pid;
+  pid = (int)(current_thread_info()->task->pid);
   if (pid != tinfo_est->estadistiques->pid) reset_info(pid, tinfo_est);  
   tinfo_est->estadistiques->num_entrades++;     /* Incrementem el numero de crides per proces */      
   sysc_info_table[NCRIDA].num_crides++;	    /* Incrementem el numero de crides a la crida */
 }
 
-inline void fin_est(int resultat, struct th_info_est * tinfo_est, int NCRIDA)
+inline void fin_est(int resultat, struct th_info_est * tinfo_est,unsigned long long inici, unsigned long long final, int NCRIDA)
 {
   if(resultat==0)					
     {							
