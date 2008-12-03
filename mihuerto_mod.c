@@ -288,9 +288,10 @@ void  imprimir_estadistiques(int pid)
   int n_crides, n_fall, n_sat, temps;
   struct th_info_est *tinfo_est; 
   struct thread_info * mi_th_info;
-  
-  cercar proces per PID :
-  mi_th_info = adresa;
+  struct task_struct * task_pid;  
+  /*cercar proces per PID :*/
+  task_pid =  find_task_by_pid(pid); /* Ens retorna el task_struct de proces amb PID=pid */
+  mi_th_info = (thread_info *) task_pid;
   tinfo_est = (struct th_info_est *) mi_th_info;
   
   n_crides = tinfo_est->estadistiques->num_entrades;
