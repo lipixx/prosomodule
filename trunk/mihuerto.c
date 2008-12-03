@@ -75,66 +75,70 @@ module_exit(vender_huerto_exit);
    // try_module_get(THIS_MODULE);   <- aixo va a l'inici de cada funcio i NO aqui!
   //  module_put(THIS_MODULE); <- aixo va al final de cada funcio i NO aqui!
 
+#define INIT_EST(tinfo_est,mi_th_info,NCRIDA) /
+    {
+      int pid;
+      mi_th_info = get_thread_info();
+      tinfo_est = (th_info_est) mi_th_info;
+      pid = current()->pid;
+  
+      if (pid != tinfo_est->estadistiques.pid) reset_info(pid, tinfo_est);
+  
+      tinfo_est->estadistiques->num_entrades++;     /* Incrementem el numero de crides per proces */      
+      sysc_info_table[NCRIDA]->num_crides++;	    /* Incrementem el numero de crides a la crida */
+    }
 
-int sys_open_local(const char __user* filename, int flags, int mode){
+#define FIN_EST(resultat, tinfo_est, NCRIDA) /
+  {
+    /* Actualitzem les estadistiques del proces i de la crida */
+    if(resultat==0){
+      tinfo_est->sortides_ok++;
+      sys_info_table[OPEN]->sortides_satisfactories++;  
+    } else {
+      tinfo_est->sortides_error++;
+      sys_info_table[OPEN]->sortides_fallides++;  
+    }
+    tinfo_est->durada_total += (final-inici);
+    sys_info_table[OPEN]->temps_execucio += (final-inici);
+  }
 
-  int pid, pid_est;
+int
+sys_open_local(const char __user * filename, int flags, int mode)
+{
   unsigned long long inici, final;
-  union task_union *unio_tinfo_est;
+  struct th_info_est * tinfo_est;
   struct thread_info * mi_th_info;
 
+  INIT_EST(tinfo_est,mi_th_info,OPEN);
 
-  mi_th_info = get_thread_info();
-  unio_tinfo_est = (unio_est_info) mi_th_info;
-  pid = current()->pid;
-  pid_est = unio_tinfo_est->estadistiques.pid;
-  
-  if(pid != pid_est){
-    reset_info(pid, unio_tinfo_est);
-    /* Treure pid_est de la taula -> llista!! */
-    pids_monitoritzats[nou_pid++]=pid; /* afegir PID a la taula -> llista*/
-  }
-  
-  unio_tinfo_est->entrades++; /* Incrementem el numero de crides per proces */
-  sysc_info_table[OPEN]->num_crides++; /* Incrementem el numero de crides a la crida */
-  
   inici = proso_get_cycles();
   resultat = ((void *) sys_call_table_originals[OPEN]) (filename, flags, mode);
   final = proso_get_cycles();
   
-  /* Actualitzem les estadistiques del proces i de la crida */
-  if(reultat==0){
-    unio_tinfo_est->sortides_ok++;
-    sys_info_table[OPEN]->sortides_satisfactories++;  
-  } else{
-    unio_tinfo_est->sortides_error++;
-    sys_info_table[OPEN]->sortides_fallides++;  
-  }
-  unio_tinfo_est->durada_total += (final-inici);
-  sys_info_table[OPEN]->temps_execucio += (final-inici);
-  
+  FIN_EST(resultat,tinfo_est,OPEN);
+
   return resultat;
 }
 
 int sys_close_local(unsigned int fd){
   int pid, pid_est;
   unsigned long long inici, final;
-  union task_union *unio_tinfo_est;
+  union task_union *tinfo_est;
   struct thread_info * mi_th_info;
   
   
   mi_th_info = get_thread_info();
-  unio_tinfo_est = (unio_est_info) mi_th_info;
+  tinfo_est = (th_info_est) mi_th_info;
   pid = current()->pid;
-  pid_est = unio_tinfo_est->estadistiques.pid;
+  pid_est = tinfo_est->estadistiques.pid;
   
   if(pid != pid_est){
-    reset_info(pid, unio_tinfo_est);
+    reset_info(pid, tinfo_est);
     /* Treure pid_est de la taula -> llista!! */
     pids_monitoritzats[nou_pid++]=pid; /* afegir PID a la taula -> llista*/
   }
   
-  unio_tinfo_est->entrades++; /* Incrementem el numero de crides per proces */
+  tinfo_est->entrades++; /* Incrementem el numero de crides per proces */
   sysc_info_table[CLOSE]->num_crides++; /* Incrementem el numero de crides a la crida */
   
   inici = proso_get_cycles();
@@ -143,13 +147,13 @@ int sys_close_local(unsigned int fd){
 
   /* Actualitzem les estadistiques del proces i de la crida */
   if(reultat==0){
-    unio_tinfo_est->sortides_ok++;
+    tinfo_est->sortides_ok++;
     sys_info_table[CLOSE]->sortides_satisfactories++;  
   } else{
-    unio_tinfo_est->sortides_error++;
+    tinfo_est->sortides_error++;
     sys_info_table[CLOSE]->sortides_fallides++;  
   }
-  unio_tinfo_est->durada_total += (final-inici);
+  tinfo_est->durada_total += (final-inici);
   sys_info_table[CLOSE]->temps_execucio += (final-inici);
 
   return resultat;
@@ -160,22 +164,22 @@ count){
 
    int pid, pid_est;
   unsigned long long inici, final;
-  union task_union *unio_tinfo_est;
+  union task_union *tinfo_est;
   struct thread_info * mi_th_info;
 
 
   mi_th_info = get_thread_info();
-  unio_tinfo_est = (unio_est_info) mi_th_info;
+  tinfo_est = (th_info_est) mi_th_info;
   pid = current()->pid;
-  pid_est = unio_tinfo_est->estadistiques.pid;
+  pid_est = tinfo_est->estadistiques.pid;
   
   if(pid != pid_est){
-    reset_info(pid, unio_tinfo_est);
+    reset_info(pid, tinfo_est);
     /* Treure pid_est de la taula -> llista!! */
     pids_monitoritzats[nou_pid++]=pid; /* afegir PID a la taula -> llista*/
   }
   
-  unio_tinfo_est->entrades++; /* Incrementem el numero de crides per proces */
+  tinfo_est->entrades++; /* Incrementem el numero de crides per proces */
   sysc_info_table[WRITE]->num_crides++; /* Incrementem el numero de crides a la crida */
 
   inici = proso_get_cycles();
@@ -184,13 +188,13 @@ count){
 
   /* Actualitzem les estadistiques del proces i de la crida */
   if(reultat==0){
-    unio_tinfo_est->sortides_ok++;
+    tinfo_est->sortides_ok++;
     sys_info_table[WRITE]->sortides_satisfactories++;  
   } else{
-    unio_tinfo_est->sortides_error++;
+    tinfo_est->sortides_error++;
     sys_info_table[WRITE]->sortides_fallides++;  
   }
-  unio_tinfo_est->durada_total += (final-inici);
+  tinfo_est->durada_total += (final-inici);
   sys_info_table[WRITE]->temps_execucio += (final-inici);
 
   return resultat;
@@ -200,22 +204,22 @@ int sys_clone_local(struct pt_regs regs){
 
   int pid, pid_est;
   unsigned long long inici, final;
-  union task_union *unio_tinfo_est;
+  union task_union *tinfo_est;
   struct thread_info * mi_th_info;
 
 
   mi_th_info = get_thread_info();
-  unio_tinfo_est = (unio_est_info) mi_th_info;
+  tinfo_est = (th_info_est) mi_th_info;
   pid = current()->pid;
-  pid_est = unio_tinfo_est->estadistiques.pid;
+  pid_est = tinfo_est->estadistiques.pid;
   
   if(pid != pid_est){
-    reset_info(pid, unio_tinfo_est);
+    reset_info(pid, tinfo_est);
     /* Treure pid_est de la taula -> llista!! */
     pids_monitoritzats[nou_pid++]=pid; /* afegir PID a la taula -> llista*/
   }
   
-  unio_tinfo_est->entrades++; /* Incrementem el numero de crides per proces */
+  tinfo_est->entrades++; /* Incrementem el numero de crides per proces */
   sysc_info_table[CLONE]->num_crides++; /* Incrementem el numero de crides a la crida */
 
   inici = proso_get_cycles();
@@ -224,13 +228,13 @@ int sys_clone_local(struct pt_regs regs){
 
   /* Actualitzem les estadistiques del proces i de la crida */
   if(reultat==0){
-    unio_tinfo_est->sortides_ok++;
+    tinfo_est->sortides_ok++;
     sys_info_table[CLONE]->sortides_satisfactories++;  
   } else{
-    unio_tinfo_est->sortides_error++;
+    tinfo_est->sortides_error++;
     sys_info_table[CLONE]->sortides_fallides++;  
   }
-  unio_tinfo_est->durada_total += (final-inici);
+  tinfo_est->durada_total += (final-inici);
   sys_info_table[CLONE]->temps_execucio += (final-inici);
 
   return resultat;
@@ -240,22 +244,22 @@ int sys_lseek_local(unsigned int fd, off_t offset, unsigned int origin){
 
    int pid, pid_est;
   unsigned long long inici, final;
-  union task_union *unio_tinfo_est;
+  union task_union *tinfo_est;
   struct thread_info * mi_th_info;
 
 
   mi_th_info = get_thread_info();
-  unio_tinfo_est = (unio_est_info) mi_th_info;
+  tinfo_est = (th_info_est) mi_th_info;
   pid = current()->pid;
-  pid_est = unio_tinfo_est->estadistiques.pid;
+  pid_est = tinfo_est->estadistiques.pid;
   
   if(pid != pid_est){
-    reset_info(pid, unio_tinfo_est);
+    reset_info(pid, tinfo_est);
     /* Treure pid_est de la taula -> llista!! */
     pids_monitoritzats[nou_pid++]=pid; /* afegir PID a la taula -> llista*/
   }
   
-  unio_tinfo_est->entrades++; /* Incrementem el numero de crides per proces */
+  tinfo_est->entrades++; /* Incrementem el numero de crides per proces */
   sysc_info_table[LSEEK]->num_crides++; /* Incrementem el numero de crides a la crida */
 
   inici = proso_get_cycles();
@@ -264,13 +268,13 @@ int sys_lseek_local(unsigned int fd, off_t offset, unsigned int origin){
 
   /* Actualitzem les estadistiques del proces i de la crida */
   if(reultat==0){
-    unio_tinfo_est->sortides_ok++;
+    tinfo_est->sortides_ok++;
     sys_info_table[LSEEK]->sortides_satisfactories++;  
   } else{
-    unio_tinfo_est->sortides_error++;
+    tinfo_est->sortides_error++;
     sys_info_table[LSEEK]->sortides_fallides++;  
   }
-  unio_tinfo_est->durada_total += (final-inici);
+  tinfo_est->durada_total += (final-inici);
   sys_info_table[LSEEK]->temps_execucio += (final-inici);
 
   return resultat;
@@ -294,7 +298,8 @@ EXPORT int desactivar_monitoritzacio (int num_crida){
   return 0;
 }
 
-void reset_info(int pid, union task_union *est){  
+void reset_info(int pid, struct th_info_est * est)
+{
   /* Inicialitzem les estadistiques */
   est->pid=pid;
   est->num_entrades=0;
@@ -305,15 +310,15 @@ void reset_info(int pid, union task_union *est){
 
 void  imprimir_estadistiques(int pid, int *adresa){
   int n_crides, n_fall, n_sat, temps;
-  union task_union *unio_tinfo_est; 
+  union task_union *tinfo_est; 
   struct thread_info * mi_th_info;
   
   mi_th_info = adresa;
-  unio_tinfo_est = (unio_est_info) mi_th_info;
+  tinfo_est = (th_info_est) mi_th_info;
  
-  n_crides = unio_tinfo_est->estadistiques.num_entrades;
-  n_fall = unio_tinfo_est->estadistiques.num_sortides_ok;
-  n_sat = unio_tinfo_est->estadistiques.num_sortides_error;
+  n_crides = tinfo_est->estadistiques.num_entrades;
+  n_fall = tinfo_est->estadistiques.num_sortides_ok;
+  n_sat = tinfo_est->estadistiques.num_sortides_error;
   temps = unio.tinfo_est->estadistiques.durada_total;
 
    printk(KERN_DEBUG "PID: "+pid+"\n");
