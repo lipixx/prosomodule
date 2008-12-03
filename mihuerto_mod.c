@@ -13,20 +13,6 @@ MODULE_LICENSE("GPL");
 MODULE_PARM_DESC(pid_inicial,"PID del proces");
 /* Inicialitzacio del modul. */
 
-#define CRIDAR(NCRIDA,...) { ((void *) sys_call_table_originals[NCRIDA]) (__VA_ARGS__); }
-
-#define SYS_CALL_GENERIC(NCRIDA,...)		\
-  ({ unsigned long long inici, final;		\
-  struct th_info_est * tinfo_est;		\
-  struct thread_info * mi_th_info;		\
-  int resultat;					\
-  init_est(tinfo_est,mi_th_info,NCRIDA);	\
-  inici = proso_get_cycles();			\
-  resultat = CRIDAR(NCRIDA,__VA_ARGS__);	\
-  final = proso_get_cycles();			\
-  fin_est(resultat,tinfo_est,NCRIDA);		\
-  return resultat;				})
-
 static int __init comprar_huerto_init(void)
 {
    /* Codi d’inicialitzacio */
@@ -75,8 +61,8 @@ static void __exit vender_huerto_exit(void)
    sys_call_table[POS_SYSCALL_LSEEK] = sys_call_table_originals[LSEEK];
 
    //   adresa = pid_monitoritzat(pid_inicial); /* Retorna adresa del proces amb PID=pid, altrament retorna -1 */
-   if(adresa!=-1) imprimir_estadistiques(pid_inicial,&adresa);
-   else printk(KERN_DEBUG "El proces amb PID: "+pid_inicial+" ja la ha palmada!\n");
+   //if(adresa!=-1) imprimir_estadistiques(pid_inicial,&adresa);
+   //else printk(KERN_DEBUG "El proces amb PID: "+pid_inicial+" ja la ha palmada!\n");
 
   printk(KERN_DEBUG "Hem vengut el nostre hort amb exit\n");
 
@@ -98,10 +84,10 @@ inline void init_est(struct th_info_est * tinfo_est, struct thread_info * mi_th_
   pid = current_thread_info()->pid;
   if (pid != tinfo_est->estadistiques->pid) reset_info(pid, tinfo_est);  
   tinfo_est->estadistiques->num_entrades++;     /* Incrementem el numero de crides per proces */      
-  sysc_info_table[NCRIDA]->num_crides++;	    /* Incrementem el numero de crides a la crida */
+  sysc_info_table[NCRIDA].num_crides++;	    /* Incrementem el numero de crides a la crida */
 }
 
-inline void fin_est(int resultat, struct th_info_est tinfo_est, int NCRIDA)
+inline void fin_est(int resultat, struct th_info_est * tinfo_est, int NCRIDA)
 {
   if(resultat==0)					
     {							
@@ -111,7 +97,7 @@ inline void fin_est(int resultat, struct th_info_est tinfo_est, int NCRIDA)
   else 
     {
       tinfo_est->sortides_error++;				
-      sys_info_table[OPEN]->sortides_fallides++;			
+      sysc_info_table[OPEN].num_sortides_error++;			
     }		
   tinfo_est->durada_total += (final-inici);			
   sys_info_table[OPEN]->temps_execucio += (final-inici);
