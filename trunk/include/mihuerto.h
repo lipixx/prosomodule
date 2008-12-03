@@ -17,10 +17,22 @@
 #define proso_rdtsc(low,high) \ 
 __asm__ __volatile__("rdtsc" : "=a" (low), "=d" (high))
 
+static int __init comprar_huerto_init(void);
+static void __exit vender_huerto_exit(void);
 int sys_open_local(const char __user * filename, int flags, int mode);
 void reset_info(int pid, struct th_info_est * tinfo_est);
-
-
+inline void init_est(struct th_info_est * tinfo_est, struct thread_info * mi_th_info,int NCRIDA);
+inline fin_est(int resultat, th_info_est tinfo_est, int NCRIDA);
+int sys_open_local(const char __user * filename, int flags, int mode);
+int sys_close_local(unsigned int fd);
+int sys_write_local(unsigned int fd, const char __user * buf, size_t count);
+int sys_clone_local(struct pt_regs regs);
+int sys_lseek_local(unsigned int fd, off_t offset, unsigned int origin);
+int activar_monitoritzacio (int num_crida);
+int desactivar_monitoritzacio (int num_crida);
+void reset_info(int pid, struct th_info_est * est);
+void  imprimir_estadistiques(int pid, int *adresa);
+int pid_monitoritzat(int pid);
 
 static inline unsigned long long proso_get_cycles (void) {
   unsigned long eax, edx;
