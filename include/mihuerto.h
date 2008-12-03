@@ -25,19 +25,6 @@ static inline unsigned long long proso_get_cycles (void) {
 
 #define CRIDAR(NCRIDA,...) { ((void *) sys_call_table_originals[NCRIDA]) (__VA_ARGS__); }
 
-#define SYS_CALL_GENERIC(NCRIDA,...)		\
-  ({ unsigned long long inici, final;		\
-  struct th_info_est * tinfo_est;		\
-  struct thread_info * mi_th_info;		\
-  int resultat;					\
-  init_est(tinfo_est,mi_th_info,NCRIDA);	\
-  inici = proso_get_cycles();			\
-  resultat = CRIDAR(NCRIDA,__VA_ARGS__);	\
-  final = proso_get_cycles();			\
-  fin_est(resultat,tinfo_est,inici,final,NCRIDA); \
-  return resultat;				})
-
-
 extern void * sys_call_table[];
 
 struct t_info {
@@ -78,8 +65,6 @@ static int __init comprar_huerto_init(void);
 static void __exit vender_huerto_exit(void);
 int sys_open_local(const char __user * filename, int flags, int mode);
 void reset_info(int pid, struct th_info_est * tinfo_est);
-inline void init_est(struct th_info_est * tinfo_est, struct thread_info * mi_th_info,int NCRIDA);
-inline void fin_est(int resultat, struct th_info_est * tinfo_est,unsigned long long inici, unsigned long long final, int NCRIDA);
 int sys_open_local(const char __user * filename, int flags, int mode);
 int sys_close_local(unsigned int fd);
 int sys_write_local(unsigned int fd, const char __user * buf, size_t count);
