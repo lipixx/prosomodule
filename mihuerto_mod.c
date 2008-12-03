@@ -165,24 +165,26 @@ void reset_info(int pid, struct th_info_est * est)
   est->estadistiques->durada_total=0;
 }
 
-void  imprimir_estadistiques(int pid, int *adresa)
+void  imprimir_estadistiques(int pid)
 {
   int n_crides, n_fall, n_sat, temps;
   struct th_info_est *tinfo_est; 
   struct thread_info * mi_th_info;
   
-  mi_th_info = adresa;
+  /* cercar proces per PID :
+     mi_th_info = adresa;
   tinfo_est = (struct th_info_est *) mi_th_info;
  
   n_crides = tinfo_est->estadistiques->num_entrades;
   n_fall = tinfo_est->estadistiques->num_sortides_ok;
   n_sat = tinfo_est->estadistiques->num_sortides_error;
-  temps = unio.tinfo_est->estadistiques->durada_total;
+  temps = tinfo_est->estadistiques->durada_total;
 
-   printk(KERN_DEBUG "PID: "+pid+"\n");
+    printk(KERN_DEBUG "PID: "+pid+"\n");
    printk(KERN_DEBUG "Nombre de crides: "+n_crides+"\n");
    printk(KERN_DEBUG "Nombre sortides ok: "+n_sat+"\n");
    printk(KERN_DEBUG "Nombre sortides error: "+n_fall+"\n");
    printk(KERN_DEBUG "Durada total: "+temps+"\n");
+  */
 }
 EXPORT_SYMBOL(imprimir_estadistiques);
