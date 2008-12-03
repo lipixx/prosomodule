@@ -40,7 +40,7 @@ struct sysc_info{
   int temps_execucio;
 };
 
-int nou_pid; /* Indica la posicio de la taula pids_monitoritzats on hem de posar el proxim PID */
+//int nou_pid; /* Indica la posicio de la taula pids_monitoritzats on hem de posar el proxim PID */
 int pids_monitoritzats[MAX_PIDS_MONITORITZATS];
 
 struct sysc_info sysc_info_table[N_CRIDES_A_MONITORITZAR];
