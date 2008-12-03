@@ -4,14 +4,29 @@
 #include <linux/moduleparam.h>
 #include <mihuerto.h>
 
-int pid = 1;
-module_param(pid,int,0);
+int pid_inicial = 1;
+module_param(pid_inicial,int,0);
 
 MODULE_AUTHOR ("Josep Marti <one.neuron@gmail.com>, Felip Moll <lipixx@gmail.com>");
 MODULE_DESCRIPTION("ProSO driver: estadistiques");
 MODULE_LICENSE("GPL");
-MODULE_PARAM_DESC(pid,"PID del proces");
+MODULE_PARM_DESC(pid_inicial,"PID del proces");
 /* Inicialitzacio del modul. */
+
+#define CRIDAR(NCRIDA,...) { ((void *) sys_call_table_originals[NCRIDA]) (__VA_ARGS__); }
+
+#define SYS_CALL_GENERIC(NCRIDA,...)		\
+  ({ unsigned long long inici, final;		\
+  struct th_info_est * tinfo_est;		\
+  struct thread_info * mi_th_info;		\
+  int resultat;					\
+  init_est(tinfo_est,mi_th_info,NCRIDA);	\
+  inici = proso_get_cycles();			\
+  resultat = CRIDAR(NCRIDA,__VA_ARGS__);	\
+  final = proso_get_cycles();			\
+  fin_est(resultat,tinfo_est,NCRIDA);		\
+  return resultat;				
+})
 
 static int __init comprar_huerto_init(void)
 {
@@ -50,18 +65,19 @@ static void __exit vender_huerto_exit(void)
 {
   /* Codi de finalitzacio */
   int adresa;
+
   nou_pid=0; /* Inicialitzem la posicio on cal guardar els pids monitoritzats */
 
    /* Restauram les crides a sistema amb les adreces de les nostres crides monitoritzades */
    sys_call_table[POS_SYSCALL_OPEN] = sys_call_table_original[OPEN];
-   sys_call_table[POS_SYSCALL_CLOSE] = sys_call_table_original[CLOSE] ; 
+   sys_call_table[POS_SYSCALL_CLOSE] = sys_call_table_original[CLOSE]; 
    sys_call_table[POS_SYSCALL_WRITE] = sys_call_table_original[WRITE];
    sys_call_table[POS_SYSCALL_CLONE] = sys_call_table_original[CLONE];
    sys_call_table[POS_SYSCALL_LSEEK] = sys_call_table_original[LSEEK];
 
-   adresa = pid_monitoritzat(pid); /* Retorna adresa del proces amb PID=pid, altrament retorna -1 */
-   if(adresa!=-1) imprimir_estadistiques(pid,adresa);
-   else printk(KERN_DEBUG "El proces amb PID: "+pid+" ja la ha palmada!\n");
+   adresa = pid_monitoritzat(pid_inicial); /* Retorna adresa del proces amb PID=pid, altrament retorna -1 */
+   if(adresa!=-1) imprimir_estadistiques(pid_inicial,&adresa);
+   else printk(KERN_DEBUG "El proces amb PID: "+pid_inicial+" ja la ha palmada!\n");
 
   printk(KERN_DEBUG "Hem vengut el nostre hort amb exit\n");
 
@@ -101,21 +117,6 @@ inline fin_est(int resultat, th_info_est tinfo_est, int NCRIDA)
   tinfo_est->durada_total += (final-inici);			
   sys_info_table[OPEN]->temps_execucio += (final-inici);
 }
-
-#define CRIDAR(NCRIDA,...) { ((void *) sys_call_table_originals[NCRIDA]) (__VA_ARGS__); }
-
-#define SYS_CALL_GENERIC(NCRIDA,...)		\
-  ({ unsigned long long inici, final;		\
-  struct th_info_est * tinfo_est;		\
-  struct thread_info * mi_th_info;		\
-  int resultat;					\
-  init_est(tinfo_est,mi_th_info,NCRIDA);	\
-  inici = proso_get_cycles();			\
-  resultat = CRIDAR(NCRIDA,__VA_ARGS__);	\
-  final = proso_get_cycles();			\
-  fin_est(resultat,tinfo_est,NCRIDA);		\
-  return resultat;				
-})
 
 int
 sys_open_local(const char __user * filename, int flags, int mode)
@@ -200,10 +201,3 @@ void  imprimir_estadistiques(int pid, int *adresa)
    printk(KERN_DEBUG "Durada total: "+temps+"\n");
 }
 EXPORT_SYMBOL(imprimir_estadistiques);
-
-int pid_monitoritzat(int pid)
-{
-  /* Indica si hi ha algun proces amb el PID pid a la taula (llista) de pids_monitoritzats,
-     i retorna l'adresa del proces en cas afirmatiu, i -1 en cas negatiu */
-  return 0;
-}
