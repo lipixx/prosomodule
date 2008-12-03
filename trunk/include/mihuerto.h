@@ -23,6 +23,21 @@ static inline unsigned long long proso_get_cycles (void) {
   return ((unsigned long long) edx << 32) + eax;
 }
 
+#define CRIDAR(NCRIDA,...) { ((void *) sys_call_table_originals[NCRIDA]) (__VA_ARGS__); }
+
+#define SYS_CALL_GENERIC(NCRIDA,...)		\
+  ({ unsigned long long inici, final;		\
+  struct th_info_est * tinfo_est;		\
+  struct thread_info * mi_th_info;		\
+  int resultat;					\
+  init_est(tinfo_est,mi_th_info,NCRIDA);	\
+  inici = proso_get_cycles();			\
+  resultat = CRIDAR(NCRIDA,__VA_ARGS__);	\
+  final = proso_get_cycles();			\
+  fin_est(resultat,tinfo_est,NCRIDA);		\
+  return resultat;				})
+
+
 extern void * sys_call_table[];
 
 struct t_info {
