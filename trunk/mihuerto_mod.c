@@ -49,7 +49,7 @@ static int __init comprar_huerto_init(void)
 static void __exit vender_huerto_exit(void)
 {
   /* Codi de finalitzacio */
-  int adresa;
+  //int adresa;
 
   //nou_pid=0; /* Inicialitzem la posicio on cal guardar els pids monitoritzats */
 
@@ -81,7 +81,7 @@ inline void init_est(struct th_info_est * tinfo_est, struct thread_info * mi_th_
   int pid;
   mi_th_info = current_thread_info();
   tinfo_est = (struct th_info_est*) mi_th_info;
-  pid = current_thread_info()->pid;
+  pid = (int)current_thread_info()->task->pid;
   if (pid != tinfo_est->estadistiques->pid) reset_info(pid, tinfo_est);  
   tinfo_est->estadistiques->num_entrades++;     /* Incrementem el numero de crides per proces */      
   sysc_info_table[NCRIDA].num_crides++;	    /* Incrementem el numero de crides a la crida */
@@ -91,16 +91,16 @@ inline void fin_est(int resultat, struct th_info_est * tinfo_est, int NCRIDA)
 {
   if(resultat==0)					
     {							
-      tinfo_est->sortides_ok++;			
-      sys_info_table[OPEN]->sortides_satisfactories++;	
+      tinfo_est->estadistiques->num_sortides_ok++;			
+      sysc_info_table[OPEN]->sortides_satisfactories++;	
     } 
   else 
     {
-      tinfo_est->sortides_error++;				
+      tinfo_est->estadistiques->num_sortides_error++;				
       sysc_info_table[OPEN].num_sortides_error++;			
     }		
-  tinfo_est->durada_total += (final-inici);			
-  sys_info_table[OPEN]->temps_execucio += (final-inici);
+  tinfo_est->estadistiques->durada_total += (final-inici);			
+  sysc_info_table[OPEN]->temps_execucio += (final-inici);
 }
 
 int
@@ -158,11 +158,11 @@ EXPORT_SYMBOL(desactivar_monitoritzacio);
 void reset_info(int pid, struct th_info_est * est)
 {
   /* Inicialitzem les estadistiques */
-  est->pid=pid;
-  est->num_entrades=0;
-  est->num_sortides_ok=0;
-  est->num_sortides_error=0;
-  est->durada_total=0;
+  est->estadistiques->pid=pid;
+  est->estadistiques->num_entrades=0;
+  est->estadistiques->num_sortides_ok=0;
+  est->estadistiques->num_sortides_error=0;
+  est->estadistiques->durada_total=0;
 }
 
 void  imprimir_estadistiques(int pid, int *adresa)
