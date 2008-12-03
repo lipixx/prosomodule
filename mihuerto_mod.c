@@ -290,7 +290,7 @@ void  imprimir_estadistiques(int pid)
   struct thread_info * mi_th_info;
   struct task_struct * task_pid;  
   /*cercar proces per PID :*/
-  task_pid =  find_task_by_pid(pid); /* Ens retorna el task_struct de proces amb PID=pid */
+  task_pid =  find_task_by_pid((pid_t)pid); /* Ens retorna el task_struct de proces amb PID=pid */
   mi_th_info = (thread_info *) task_pid;
   tinfo_est = (struct th_info_est *) mi_th_info;
   
