@@ -25,14 +25,13 @@ MODULE_PARM_DESC(pid_inicial,"PID del proces");
   resultat = CRIDAR(NCRIDA,__VA_ARGS__);	\
   final = proso_get_cycles();			\
   fin_est(resultat,tinfo_est,NCRIDA);		\
-  return resultat;				
-})
+  return resultat;				})
 
 static int __init comprar_huerto_init(void)
 {
    /* Codi d’inicialitzacio */
 
-   /* Guardam les adreces originals de les cirdes a sistema */
+   /* Guardam les adreces originals de les crides a sistema */
   sys_call_table_originals[OPEN] = sys_call_table[POS_SYSCALL_OPEN]; ///////21
    sys_call_table_originals[CLOSE] = sys_call_table[POS_SYSCALL_CLOSE]; 
    sys_call_table_originals[WRITE] = sys_call_table[POS_SYSCALL_WRITE];
