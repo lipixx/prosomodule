@@ -75,4 +75,4 @@ int activar_monitoritzacio (int num_crida);
 int desactivar_monitoritzacio (int num_crida);
 void reset_info(int pid, struct th_info_est * est);
 void  imprimir_estadistiques(int pid);
-struct task_struct find_task_by_pid(pid_t pid);
+struct task_struct * find_task_by_vpid(pid_t pid);
