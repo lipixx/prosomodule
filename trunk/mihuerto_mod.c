@@ -79,10 +79,12 @@ module_exit(vender_huerto_exit);
 inline void init_est(struct th_info_est * tinfo_est, struct thread_info * mi_th_info,int NCRIDA)
 {
   int pid;
+  struct task_struct * t; /* de prova <-- TEMPORAL!! */
+
   mi_th_info = current_thread_info();
   tinfo_est = (struct th_info_est*) mi_th_info;
-  struct task_struct * t= current_thread_info()->task;
-  pid = t->pid;
+  t= current_thread_info()->task;
+  pid = (int)t->pid;
   //pid = (int)(current_thread_info()->task)->pid;
   if (pid != tinfo_est->estadistiques->pid) reset_info(pid, tinfo_est);  
   tinfo_est->estadistiques->num_entrades++;     /* Incrementem el numero de crides per proces */      
