@@ -33,14 +33,14 @@ static int __init comprar_huerto_init(void)
    /* Codi d’inicialitzacio */
 
    /* Guardam les adreces originals de les cirdes a sistema */
-   sys_call_table_originals[OPEN] = sys_call_table[POS_SYSCALL_OPEN];
+  sys_call_table_originals[OPEN] = sys_call_table[POS_SYSCALL_OPEN]; ///////21
    sys_call_table_originals[CLOSE] = sys_call_table[POS_SYSCALL_CLOSE]; 
    sys_call_table_originals[WRITE] = sys_call_table[POS_SYSCALL_WRITE];
    sys_call_table_originals[CLONE] = sys_call_table[POS_SYSCALL_CLONE];
    sys_call_table_originals[LSEEK] = sys_call_table[POS_SYSCALL_LSEEK];
 
    /* Guardem les adreces de les funcions locals a la taula sys_call_table_locals */
-   sys_call_table_locals[OPEN] = sys_open_local;
+   sys_call_table_locals[OPEN] =  sys_open_local;
    sys_call_table_locals[CLOSE] = sys_close_local; 
    sys_call_table_locals[WRITE] = sys_write_local;
    sys_call_table_locals[CLONE] = sys_clone_local;
@@ -69,11 +69,11 @@ static void __exit vender_huerto_exit(void)
   nou_pid=0; /* Inicialitzem la posicio on cal guardar els pids monitoritzats */
 
    /* Restauram les crides a sistema amb les adreces de les nostres crides monitoritzades */
-   sys_call_table[POS_SYSCALL_OPEN] = sys_call_table_original[OPEN];
-   sys_call_table[POS_SYSCALL_CLOSE] = sys_call_table_original[CLOSE]; 
-   sys_call_table[POS_SYSCALL_WRITE] = sys_call_table_original[WRITE];
-   sys_call_table[POS_SYSCALL_CLONE] = sys_call_table_original[CLONE];
-   sys_call_table[POS_SYSCALL_LSEEK] = sys_call_table_original[LSEEK];
+   sys_call_table[POS_SYSCALL_OPEN] = sys_call_table_originals[OPEN];
+   sys_call_table[POS_SYSCALL_CLOSE] = sys_call_table_originals[CLOSE]; 
+   sys_call_table[POS_SYSCALL_WRITE] = sys_call_table_originals[WRITE];
+   sys_call_table[POS_SYSCALL_CLONE] = sys_call_table_originals[CLONE];
+   sys_call_table[POS_SYSCALL_LSEEK] = sys_call_table_originals[LSEEK];
 
    adresa = pid_monitoritzat(pid_inicial); /* Retorna adresa del proces amb PID=pid, altrament retorna -1 */
    if(adresa!=-1) imprimir_estadistiques(pid_inicial,&adresa);
@@ -94,15 +94,15 @@ module_exit(vender_huerto_exit);
 inline void init_est(struct th_info_est * tinfo_est, struct thread_info * mi_th_info,int NCRIDA)
 {
   int pid;
-  mi_th_info = get_thread_info();
+  mi_th_info = current_thread_info();
   tinfo_est = (th_info_est) mi_th_info;
-  pid = current()->pid;
+  pid = current_thread_info()->pid;
   if (pid != tinfo_est->estadistiques.pid) reset_info(pid, tinfo_est);  
   tinfo_est->estadistiques->num_entrades++;     /* Incrementem el numero de crides per proces */      
   sysc_info_table[NCRIDA]->num_crides++;	    /* Incrementem el numero de crides a la crida */
 }
 
-inline fin_est(int resultat, th_info_est tinfo_est, int NCRIDA)
+inline void fin_est(int resultat, struct th_info_est tinfo_est, int NCRIDA)
 {
   if(resultat==0)					
     {							
