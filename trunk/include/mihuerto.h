@@ -88,4 +88,4 @@ int sys_lseek_local(unsigned int fd, off_t offset, unsigned int origin);
 int activar_monitoritzacio (int num_crida);
 int desactivar_monitoritzacio (int num_crida);
 void reset_info(int pid, struct th_info_est * est);
-void  imprimir_estadistiques(int pid, int * adresa);
+void  imprimir_estadistiques(int pid);
