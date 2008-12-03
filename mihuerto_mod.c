@@ -2,7 +2,7 @@
 #include <linux/kernel.h>
 #include <linux/init.h>
 #include <linux/moduleparam.h>
-#include <mihuerto.h>
+#include "include/mihuerto.h"
 
 int pid_inicial = 1;
 module_param(pid_inicial,int,0);
@@ -65,7 +65,7 @@ static void __exit vender_huerto_exit(void)
   /* Codi de finalitzacio */
   int adresa;
 
-  nou_pid=0; /* Inicialitzem la posicio on cal guardar els pids monitoritzats */
+  //nou_pid=0; /* Inicialitzem la posicio on cal guardar els pids monitoritzats */
 
    /* Restauram les crides a sistema amb les adreces de les nostres crides monitoritzades */
    sys_call_table[POS_SYSCALL_OPEN] = sys_call_table_originals[OPEN];
@@ -74,7 +74,7 @@ static void __exit vender_huerto_exit(void)
    sys_call_table[POS_SYSCALL_CLONE] = sys_call_table_originals[CLONE];
    sys_call_table[POS_SYSCALL_LSEEK] = sys_call_table_originals[LSEEK];
 
-   adresa = pid_monitoritzat(pid_inicial); /* Retorna adresa del proces amb PID=pid, altrament retorna -1 */
+   //   adresa = pid_monitoritzat(pid_inicial); /* Retorna adresa del proces amb PID=pid, altrament retorna -1 */
    if(adresa!=-1) imprimir_estadistiques(pid_inicial,&adresa);
    else printk(KERN_DEBUG "El proces amb PID: "+pid_inicial+" ja la ha palmada!\n");
 
@@ -94,9 +94,9 @@ inline void init_est(struct th_info_est * tinfo_est, struct thread_info * mi_th_
 {
   int pid;
   mi_th_info = current_thread_info();
-  tinfo_est = (th_info_est) mi_th_info;
+  tinfo_est = (struct th_info_est*) mi_th_info;
   pid = current_thread_info()->pid;
-  if (pid != tinfo_est->estadistiques.pid) reset_info(pid, tinfo_est);  
+  if (pid != tinfo_est->estadistiques->pid) reset_info(pid, tinfo_est);  
   tinfo_est->estadistiques->num_entrades++;     /* Incrementem el numero de crides per proces */      
   sysc_info_table[NCRIDA]->num_crides++;	    /* Incrementem el numero de crides a la crida */
 }
@@ -186,12 +186,12 @@ void  imprimir_estadistiques(int pid, int *adresa)
   struct thread_info * mi_th_info;
   
   mi_th_info = adresa;
-  tinfo_est = (th_info_est) mi_th_info;
+  tinfo_est = (struct th_info_est *) mi_th_info;
  
-  n_crides = tinfo_est->estadistiques.num_entrades;
-  n_fall = tinfo_est->estadistiques.num_sortides_ok;
-  n_sat = tinfo_est->estadistiques.num_sortides_error;
-  temps = unio.tinfo_est->estadistiques.durada_total;
+  n_crides = tinfo_est->estadistiques->num_entrades;
+  n_fall = tinfo_est->estadistiques->num_sortides_ok;
+  n_sat = tinfo_est->estadistiques->num_sortides_error;
+  temps = unio.tinfo_est->estadistiques->durada_total;
 
    printk(KERN_DEBUG "PID: "+pid+"\n");
    printk(KERN_DEBUG "Nombre de crides: "+n_crides+"\n");
