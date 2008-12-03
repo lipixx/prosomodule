@@ -23,6 +23,7 @@ static inline unsigned long long proso_get_cycles (void) {
   return ((unsigned long long) edx << 32) + eax;
 }
 
+extern void * sys_call_table[];
 
 struct t_info {
   int pid;
@@ -50,7 +51,7 @@ struct th_info_est
   struct t_info * estadistiques;
 };
 
-void * sys_call_table_original[N_CRIDES_A_MONITORITZAR];
+void * sys_call_table_originals[N_CRIDES_A_MONITORITZAR];
 void * sys_call_table_locals[N_CRIDES_A_MONITORITZAR];
 
 /* Aquesta taula serveix per poder fer referencia a la posicio de 
@@ -62,7 +63,7 @@ static void __exit vender_huerto_exit(void);
 int sys_open_local(const char __user * filename, int flags, int mode);
 void reset_info(int pid, struct th_info_est * tinfo_est);
 inline void init_est(struct th_info_est * tinfo_est, struct thread_info * mi_th_info,int NCRIDA);
-inline fin_est(int resultat, struct th_info_est tinfo_est, int NCRIDA);
+inline void fin_est(int resultat, struct th_info_est tinfo_est, int NCRIDA);
 int sys_open_local(const char __user * filename, int flags, int mode);
 int sys_close_local(unsigned int fd);
 int sys_write_local(unsigned int fd, const char __user * buf, size_t count);
@@ -71,5 +72,4 @@ int sys_lseek_local(unsigned int fd, off_t offset, unsigned int origin);
 int activar_monitoritzacio (int num_crida);
 int desactivar_monitoritzacio (int num_crida);
 void reset_info(int pid, struct th_info_est * est);
-void  imprimir_estadistiques(int pid, int *adresa);
-int pid_monitoritzat(int pid);
+void  imprimir_estadistiques(int pid, int * adresa);
