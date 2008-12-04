@@ -22,7 +22,6 @@ typedef unsigned long long quad;
 extern void * sys_call_table[];
 void * sys_call_table_originals[N_CRIDES_A_MONITORITZAR];
 void * sys_call_table_locals[N_CRIDES_A_MONITORITZAR];
-struct sysc_stats sysc_info_table[N_CRIDES_A_MONITORITZAR];
 
 static inline quad proso_get_cycles (void)
 {
@@ -44,7 +43,7 @@ struct sysc_stats {
   int num_fallides;
   int num_satisfactories;
   int temps_execucio;
-};
+} sysc_info_table[N_CRIDES_A_MONITORITZAR];
 
 struct th_info_est {
   struct thread_info * info_th;
