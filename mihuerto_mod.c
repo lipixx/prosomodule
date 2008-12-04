@@ -46,7 +46,7 @@ static int __init comprar_huerto_init(void)
       printk (KERN_DEBUG "El pid no existex, s'agafa el default 1");
     }
   
-  reset_info(pid_inicial, (th_info_est) t->thread_info);  
+  reset_info(pid_inicial, (struct th_info_est *) t->thread_info);  
   printk(KERN_DEBUG "MiHuerto: Loaded\n");
   
   return 0;
@@ -370,7 +370,7 @@ void  imprimir_estadistiques(int pid)
   
   if (task_pid)
     {
-      pidstats = ((th_info_est) task_pid->thread_info)->estadistiques; 
+      pidstats = ((struct th_info_est *) task_pid->thread_info)->estadistiques; 
 
       printk("    --MiHuerto --\n");
       printk("Pid          : %i\n",pidstats->pid);
