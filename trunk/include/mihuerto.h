@@ -13,13 +13,13 @@
 #define CLONE  3
 #define LSEEK  4
 
-#typedef unsigned long long quad
+typedef unsigned long long quad
 
 /* proso_get_cycles serveix per comptar el temps */
-#define proso_rdtsc(low,high) { __asm__ __volatile__("rdtsc" : "=a" (low), "=d" (high)) }
+#define proso_rdtsc(low,high) \
+  __asm__ __volatile__("rdtsc" : "=a" (low), "=d" (high))
 
 extern void * sys_call_table[];
-int pid_inicial;
 void * sys_call_table_originals[N_CRIDES_A_MONITORITZAR];
 void * sys_call_table_locals[N_CRIDES_A_MONITORITZAR];
 struct sysc_stats sysc_info_table[N_CRIDES_A_MONITORITZAR];
