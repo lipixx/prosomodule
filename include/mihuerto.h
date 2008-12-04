@@ -13,7 +13,7 @@
 #define CLONE  3
 #define LSEEK  4
 
-typedef unsigned long long quad
+typedef unsigned long long quad;
 
 /* proso_get_cycles serveix per comptar el temps */
 #define proso_rdtsc(low,high) \
