@@ -151,7 +151,7 @@ sys_close_local(unsigned int fd)
   
   /* Comptem el temps de la crida */
   inici = proso_get_cycles();			  
-  resultat = crida (filename, flags, mode);
+  resultat = crida (fd);
   final = proso_get_cycles();		
   
   if(resultat>=0)
@@ -201,7 +201,7 @@ sys_write_local(unsigned int fd, const char __user * buf, size_t count)
   
   /* Comptem el temps de la crida */
   inici = proso_get_cycles();			  
-  resultat = crida (filename, flags, mode);
+  resultat = crida (fd,buf,count);
   final = proso_get_cycles();		
   
   if(resultat>=0)
@@ -251,7 +251,7 @@ sys_clone_local(struct pt_regs regs)
   
   /* Comptem el temps de la crida */
   inici = proso_get_cycles();			  
-  resultat = crida (filename, flags, mode);
+  resultat = crida (regs);
   final = proso_get_cycles();		
   
   if(resultat>=0)
@@ -301,7 +301,7 @@ sys_lseek_local(unsigned int fd, off_t offset, unsigned int origin)
   
   /* Comptem el temps de la crida */
   inici = proso_get_cycles();			  
-  resultat = crida (filename, flags, mode);
+  resultat = crida (fd,offset,origin);
   final = proso_get_cycles();		
   
   if(resultat>=0)
