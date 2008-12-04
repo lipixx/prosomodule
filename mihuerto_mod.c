@@ -377,7 +377,7 @@ void  imprimir_estadistiques(int pid)
       printk("Num crides   : %i\n",pidstats->num_entrades);
       printk("Ret correcte : %i\n",pidstats->num_sortides_ok);
       printk("Ret erroni   : %i\n",pidstats->num_sortides_error);
-      printk("Temps total  : %q\n",pidstats->durada_total);
+      printk("Temps total  : %lld\n",pidstats->durada_total);
       printk("    -------------\n");
     }
   else
