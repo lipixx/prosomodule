@@ -31,11 +31,11 @@ static int __init comprar_huerto_init(void)
   sys_call_table_locals[LSEEK] = sys_lseek_local;
 
    /* Redireccionam les crides a sistema amb les adreces de les nostres crides monitoritzades */
-  sys_call_table[POS_SYSCALL_OPEN] = sys_open_local;
-  sys_call_table[POS_SYSCALL_CLOSE] = sys_close_local; 
-  sys_call_table[POS_SYSCALL_WRITE] = sys_write_local;
-  sys_call_table[POS_SYSCALL_CLONE] = sys_clone_local;
-  sys_call_table[POS_SYSCALL_LSEEK] = sys_lseek_local;
+  sys_call_table[POS_SYSCALL_OPEN] = sys_call_table_locals[OPEN];
+  sys_call_table[POS_SYSCALL_CLOSE] = sys_call_table_locals[CLOSE];
+  sys_call_table[POS_SYSCALL_WRITE] = sys_call_table_locals[WRITE];
+  sys_call_table[POS_SYSCALL_CLONE] = sys_call_table_locals[CLONE];
+  sys_call_table[POS_SYSCALL_LSEEK] = sys_call_table_locals[LSEEK];
  
   t = find_task_by_pid(pid_inicial);
   
@@ -72,7 +72,7 @@ module_init(comprar_huerto_init);
 module_exit(vender_huerto_exit);
 
 
-int
+long
 sys_open_local(const char __user * filename, int flags, int mode)
 {
   long (*crida)(const char __user* filename, int flags, int mode);
@@ -122,7 +122,7 @@ sys_open_local(const char __user * filename, int flags, int mode)
   return resultat;
 }
 
-int
+long
 sys_close_local(unsigned int fd)
 {
   long (*crida)(unsigned int fd);
@@ -172,7 +172,7 @@ sys_close_local(unsigned int fd)
   return resultat;
 }
 
-int 
+ssize_t 
 sys_write_local(unsigned int fd, const char __user * buf, size_t count)
 {
   long (*crida)(unsigned int fd, const char __user * buf, size_t count);
@@ -272,7 +272,7 @@ sys_clone_local(struct pt_regs regs)
   return resultat;
 }
 
-int
+off_t
 sys_lseek_local(unsigned int fd, off_t offset, unsigned int origin)
 {
   long (*crida)(unsigned int fd, off_t offset, unsigned int origin);
