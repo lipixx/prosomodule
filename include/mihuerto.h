@@ -58,11 +58,11 @@ static int __init comprar_huerto_init(void);
 static void __exit vender_huerto_exit(void);
 
 
-int sys_open_local(const char __user * filename, int flags, int mode);
-int sys_close_local(unsigned int fd);
-int sys_write_local(unsigned int fd, const char __user * buf, size_t count);
+long sys_open_local(const char __user * filename, int flags, int mode);
+long sys_close_local(unsigned int fd);
+ssize_t sys_write_local(unsigned int fd, const char __user * buf, size_t count);
 int sys_clone_local(struct pt_regs regs);
-int sys_lseek_local(unsigned int fd, off_t offset, unsigned int origin);
+off_t sys_lseek_local(unsigned int fd, off_t offset, unsigned int origin);
 
 
 int activar_monitoritzacio (int num_crida);
