@@ -2,8 +2,7 @@
 #include <linux/kernel.h>
 #include <linux/init.h>
 #include <linux/moduleparam.h>
-#include <elpayes.h>
-
+#include "include/elpayes.h"
 
 MODULE_AUTHOR ("Josep Marti <one.neuron@gmail.com>, Felip Moll <lipixx@gmail.com>");
 MODULE_DESCRIPTION("ProSO driver: estadistiques");
