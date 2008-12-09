@@ -46,7 +46,7 @@ struct sysc_stats {
 } sysc_info_table[N_CRIDES_A_MONITORITZAR];
 
 struct th_info_est {
-  struct thread_info * info_th;
+  struct thread_info info_th;
   struct pid_stats * estadistiques;
 };
 
