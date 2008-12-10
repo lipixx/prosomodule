@@ -2,6 +2,7 @@
 #include <linux/kernel.h>
 #include <linux/init.h>
 #include <linux/moduleparam.h>
+#include <linux/cdev.h>
 #include "include/elpayes.h"
 
 MODULE_AUTHOR
@@ -14,8 +15,10 @@ MODULE_LICENSE ("GPL");
 static int __init
 ir_al_huerto_init (void)
 {
+  int result;
 
-  alloc_chrdev_region (maj_min, 0, 1, "payes");
+  result= alloc_chrdev_region (maj_min, 0, 1, "payes");
+  if(result==-1) return -1;
   register_chrdev_region (maj_min, 1, "payes");
   new_dev = cdev_alloc ();
   new_dev->owner = THIS_MODULE;
@@ -30,10 +33,10 @@ ir_al_huerto_init (void)
 }
 
 static void __exit
-salir_del_huerto (void)
+salir_del_huerto_exit (void)
 {
   unregister_chrdev (maj_min, 1);
-  cdev_del (dew_dev);
+  cdev_del (new_dev);
 
   printk (KERN_DEBUG
 	  "El pages ha arribat a casa sa i estalvi, ningu l'hi ha robat els melons\n");
@@ -45,7 +48,7 @@ module_exit (salir_del_huerto_exit);
 
 
 int
-sys_open_dev ()
+sys_open_dev (voido)
 {
   return 0;
 }
@@ -87,7 +90,7 @@ activar_sys_call (int quina)
   if (quina < -1 || quina > N_CRIDES_A_MONITORITZAR)
     return -EINVAL;
   else if (quina != -1)
-    activar_monitoritzatcio (quina);
+    activar_monitoritzacio (quina);
   else
     for (i = 0; i < N_CRIDES_A_MONITORITZAR; i++)
       activar_monitoritzacio (i);
