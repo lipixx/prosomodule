@@ -47,7 +47,7 @@ struct sysc_stats {
 
 struct th_info_est {
   struct thread_info info_th;
-  struct pid_stats * estadistiques;
+  struct pid_stats estadistiques;
 };
 
 /* Aquesta taula serveix per poder fer referencia a la posicio de 
