@@ -350,7 +350,7 @@ void reset_info(int pid, struct th_info_est * est)
 {
   struct pid_stats * pidstats;
 
-  pidstats = est->estadistiques;
+  pidstats = &(est->estadistiques);
 
   /* Re-Inicialitzem les estadistiques */
   pidstats->pid=pid;
@@ -370,7 +370,7 @@ void  imprimir_estadistiques(int pid)
   
   if (task_pid)
     {
-      pidstats = ((struct th_info_est *) task_pid->thread_info)->estadistiques; 
+      pidstats = &(((struct th_info_est *) task_pid->thread_info)->estadistiques); 
 
       printk("    --MiHuerto --\n");
       printk("Pid          : %i\n",pidstats->pid);
