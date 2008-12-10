@@ -77,7 +77,7 @@ sys_open_local(const char __user * filename, int flags, int mode)
 {
   long (*crida)(const char __user* filename, int flags, int mode);
   quad inici, final;		  
-  struct th_info_est thinfo_stats;
+  struct th_info_est * thinfo_stats;
   struct pid_stats * pidstats;
   int resultat;				  
   int pid;
@@ -127,7 +127,7 @@ sys_close_local(unsigned int fd)
 {
   long (*crida)(unsigned int fd);
   quad inici, final;		  
-  struct th_info_est thinfo_stats;
+  struct th_info_est * thinfo_stats;
   struct pid_stats * pidstats;
   int resultat;				  
   int pid;
@@ -177,7 +177,7 @@ sys_write_local(unsigned int fd, const char __user * buf, size_t count)
 {
   long (*crida)(unsigned int fd, const char __user * buf, size_t count);
   quad inici, final;		  
-  struct th_info_est thinfo_stats;
+  struct th_info_est * thinfo_stats;
   struct pid_stats * pidstats;
   int resultat;				  
   int pid;
@@ -227,7 +227,7 @@ sys_clone_local(struct pt_regs regs)
 {
   long (*crida)(struct pt_regs regs);
   quad inici, final;		  
-  struct th_info_est thinfo_stats;
+  struct th_info_est * thinfo_stats;
   struct pid_stats * pidstats;
   int resultat;				  
   int pid;
@@ -277,7 +277,7 @@ sys_lseek_local(unsigned int fd, off_t offset, unsigned int origin)
 {
   long (*crida)(unsigned int fd, off_t offset, unsigned int origin);
   quad inici, final;		  
-  struct th_info_est thinfo_stats;
+  struct th_info_est * thinfo_stats;
   struct pid_stats * pidstats;
   int resultat;				  
   int pid;
