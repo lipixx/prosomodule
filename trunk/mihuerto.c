@@ -86,7 +86,7 @@ sys_open_local(const char __user * filename, int flags, int mode)
   
   crida = sys_call_table_originals[OPEN];
   thinfo_stats = (struct th_info_est * ) current_thread_info();
-  pid = thinfo_stats->info_th.task->pid;
+  pid = current_thread_info()->task->pid;
   pidstats = &(thinfo_stats->estadistiques);
 
   if (pid != pidstats->pid)
@@ -136,7 +136,7 @@ sys_close_local(unsigned int fd)
   
   crida = sys_call_table_originals[CLOSE];
   thinfo_stats = (struct th_info_est * ) current_thread_info();
-  pid = thinfo_stats->info_th.task->pid;
+  pid = current_thread_info()->task->pid;
   pidstats = &(thinfo_stats->estadistiques);
 
   if (pid != pidstats->pid)
@@ -186,7 +186,7 @@ sys_write_local(unsigned int fd, const char __user * buf, size_t count)
   
   crida = sys_call_table_originals[WRITE];
   thinfo_stats = (struct th_info_est * ) current_thread_info();
-  pid = thinfo_stats->info_th.task->pid;
+  pid = current_thread_info()->task->pid;
   pidstats = &(thinfo_stats->estadistiques);
 
   if (pid != pidstats->pid)
@@ -236,7 +236,7 @@ sys_clone_local(struct pt_regs regs)
   
   crida = sys_call_table_originals[CLONE];
   thinfo_stats = (struct th_info_est * ) current_thread_info();
-  pid = thinfo_stats->info_th.task->pid;
+  pid = current_thread_info()->task->pid;
   pidstats = &(thinfo_stats->estadistiques);
 
   if (pid != pidstats->pid)
@@ -286,7 +286,7 @@ sys_lseek_local(unsigned int fd, off_t offset, unsigned int origin)
   
   crida = sys_call_table_originals[LSEEK];
   thinfo_stats = (struct th_info_est * ) current_thread_info();
-  pid = thinfo_stats->info_th.task->pid;
+  pid = current_thread_info()->task->pid;
   pidstats = &(thinfo_stats->estadistiques);
 
   if (pid != pidstats->pid)
