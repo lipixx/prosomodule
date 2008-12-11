@@ -48,25 +48,25 @@ module_exit (salir_del_huerto_exit);
 
 
 int
-sys_open_dev (voido)
+sys_open_dev (void)
 {
   return 0;
 }
 
 int
-sys_read_dev ()
+sys_read_dev (void)
 {
   return 0;
 }
 
 int
-sys_release_dev ()
+sys_release_dev (void)
 {
   return 0;
 }
 
 int
-sys_ioctl_dev ()
+sys_ioctl_dev (void)
 {
   return 0;
 }
@@ -78,7 +78,7 @@ reset_valors (int proces_monitoritzat)
 }
 
 void
-reset_tots_valors ()
+reset_tots_valors (void)
 {
 
 }

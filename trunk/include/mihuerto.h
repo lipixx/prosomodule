@@ -46,7 +46,7 @@ struct sysc_stats
   int num_fallides;
   int num_satisfactories;
   int temps_execucio;
-} sysc_info_table[N_CRIDES_A_MONITORITZAR];
+}sysc_info_table[N_CRIDES_A_MONITORITZAR];
 
 struct th_info_est
 {

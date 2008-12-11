@@ -12,21 +12,21 @@ struct cdev *new_dev;
 
 
 int sys_read_dev (void);
-int sys_open_dev ();
-int sys_release_dev ();
-int sys_ioctl_dev ();
+int sys_open_dev (void);
+int sys_release_dev (void);
+int sys_ioctl_dev (void);
 void reset_valors (int pid);
-void reset_tots_valors ();
+void reset_tots_valors (void);
 int activar_sys_call (int quina);
 int desactivar_sys_call (int quina);
 
 
 struct file_operations file_ops = {
-  //  owner: THIS_MODULE,
- read:sys_read_dev;
- open:sys_open_dev;
- release:sys_release_dev;
- ioctl:sys_ioctl_dev;
+ owner: THIS_MODULE,
+ read: sys_read_dev,
+ open: sys_open_dev,
+ release: sys_release_dev,
+ ioctl: sys_ioctl_dev,
 };
 
 /* Operacions de l altre modul */
