@@ -19,11 +19,11 @@ ir_al_huerto_init (void)
 
   result= alloc_chrdev_region (maj_min, 0, 1, "payes");
   if(result==-1) return -1;
-  register_chrdev_region (maj_min, 1, "payes");
+  register_chrdev_region (*maj_min, 1, "payes");
   new_dev = cdev_alloc ();
   new_dev->owner = THIS_MODULE;
   new_dev->ops = &file_ops;
-  cdev_add (new_dev, maj_min, 1);
+  cdev_add (new_dev, *maj_min, 1);
   lock = 0;
 
   printk (KERN_DEBUG
@@ -35,7 +35,7 @@ ir_al_huerto_init (void)
 static void __exit
 salir_del_huerto_exit (void)
 {
-  unregister_chrdev (maj_min, 1);
+  unregister_chrdev (*maj_min,1);
   cdev_del (new_dev);
 
   printk (KERN_DEBUG
