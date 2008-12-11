@@ -7,7 +7,7 @@ char lock;
 int proces_monitoritzat;
 int sys_call_monitoritzat;
 
-struct dev_t *maj_min;
+dev_t *maj_min; 
 struct cdev *new_dev;
 
 ssize_t sys_read_dev(struct file *f, char __user *buffer, size_t s, loff_t *off);
