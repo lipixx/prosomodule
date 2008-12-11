@@ -23,7 +23,7 @@ ir_al_huerto_init (void)
   new_dev = cdev_alloc ();
   new_dev->owner = THIS_MODULE;
   new_dev->ops = &file_ops;
-  c_dev_add (new_dev, maj_min, 1);
+  cdev_add (new_dev, maj_min, 1);
   lock = 0;
 
   printk (KERN_DEBUG

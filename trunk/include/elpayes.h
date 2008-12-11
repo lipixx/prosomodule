@@ -10,7 +10,6 @@ int sys_call_monitoritzat;
 struct dev_t *maj_min;
 struct cdev *new_dev;
 
-
 ssize_t sys_read_dev(struct file *f, char __user *buffer, size_t s, loff_t *off);
 int sys_ioctl_dev(struct inode *i, struct file *f, unsigned int arg1, unsigned long arg2);
 int sys_open_dev(struct inode *i, struct file *f);
