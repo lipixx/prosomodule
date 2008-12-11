@@ -11,10 +11,11 @@ struct dev_t *maj_min;
 struct cdev *new_dev;
 
 
-int sys_read_dev (void);
-int sys_open_dev (void);
-int sys_release_dev (void);
-int sys_ioctl_dev (void);
+ssize_t sys_read_dev(struct file *f, char __user *buffer, size_t s, loff_t *off);
+int sys_ioctl_dev(struct inode *i, struct file *f, unsigned int arg1, unsigned long arg2);
+int sys_open_dev(struct inode *i, struct file *f);
+int sys_release_dev(struct inode *i, struct file *f);
+
 void reset_valors (int pid);
 void reset_tots_valors (void);
 int activar_sys_call (int quina);
@@ -33,9 +34,10 @@ struct file_operations file_ops = {
 extern void activar_monitoritzacio (int num_crida);
 extern void desactivar_monitoritzacio (int num_crida);
 
-extern int N_CRIDES_A_MONITORITZAR;
-extern sysc_info sysc_info_table[N_CRIDES_A_MONITORITZAR];
-extern struct t_info;
+//extern int N_CRIDES_A_MONITORITZAR;
+#define N_CRIDES_A_MONITORITZAR 5	/*NOMES DE PROVA*/
+extern struct sysc_stats *sysc_info_table[N_CRIDES_A_MONITORITZAR];
+//extern struct t_info;
 
 
 
