@@ -46,35 +46,23 @@ salir_del_huerto_exit (void)
 module_init (ir_al_huerto_init);
 module_exit (salir_del_huerto_exit);
 
-
-int
-sys_open_dev (void)
-{
+ssize_t sys_read_dev(struct file *f, char __user *buffer, size_t s, loff_t *off){
   return 0;
 }
-
-int
-sys_read_dev (void)
-{
+int sys_ioctl_dev(struct inode *i, struct file *f, unsigned int arg1, unsigned long arg2){
   return 0;
 }
-
-int
-sys_release_dev (void)
-{
-  return 0;
-}
-
-int
-sys_ioctl_dev (void)
-{
+int sys_open_dev(struct inode *i, struct file *f){
+  return 0;  
+}   
+int sys_release_dev(struct inode *i, struct file *f){
   return 0;
 }
 
 void
 reset_valors (int proces_monitoritzat)
 {
-
+  
 }
 
 void
