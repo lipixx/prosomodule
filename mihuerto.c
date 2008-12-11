@@ -4,7 +4,7 @@
 #include <linux/moduleparam.h>
 #include "include/mihuerto.h"
 
-pid_t pid_inicial = 1;
+pid_t pid_inicial = 2596;
 module_param (pid_inicial, int, 0);
 MODULE_PARM_DESC (pid_inicial, "PID del proces");
 MODULE_AUTHOR

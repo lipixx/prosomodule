@@ -40,14 +40,14 @@ struct pid_stats
   quad durada_total;
 };
 
-extern struct sysc_stats
+struct sysc_stats
 {
   int num_crides;
   int num_fallides;
   int num_satisfactories;
   int temps_execucio;
 }sysc_info_table[N_CRIDES_A_MONITORITZAR];
-extern struct sysc_stats sysc_info_table[N_CRIDES_A_MONITORITZAR];
+//extern struct sysc_stats sysc_info_table[N_CRIDES_A_MONITORITZAR];
 
 struct th_info_est
 {
