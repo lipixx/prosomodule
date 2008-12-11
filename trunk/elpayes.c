@@ -35,7 +35,7 @@ ir_al_huerto_init (void)
 static void __exit
 salir_del_huerto_exit (void)
 {
-  unregister_chrdev (*maj_min,1);
+  unregister_chrdev_region (*maj_min,1);
   cdev_del (new_dev);
 
   printk (KERN_DEBUG
