@@ -62,10 +62,21 @@ ssize_t sys_read_dev(struct file *f, char __user *buffer, size_t s, loff_t *off)
 int sys_ioctl_dev(struct inode *i, struct file *f, unsigned int arg1, unsigned long arg2){
   return 0;
 }
-int sys_open_dev(struct inode *i, struct file *f){
+int sys_open_dev(struct inode *i, struct file *f)
+{
+  if (lock) return -EPERM;
+  if (current->uid) return -EACCES;
+  
+  lock++;
+  
   return 0;  
 }   
-int sys_release_dev(struct inode *i, struct file *f){
+int sys_release_dev(struct inode *i, struct file *f)
+{
+  
+  if (!lock) return -EPERM;
+  lock--;
+  
   return 0;
 }
 
