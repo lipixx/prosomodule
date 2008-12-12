@@ -352,7 +352,7 @@ desactivar_monitoritzacio (int num_crida)
 }
 
 void
-reset_info (int pid, struct th_info_est *est)
+reset_info (pid_t pid, struct th_info_est *est)
 {
   struct pid_stats *pidstats;
 
