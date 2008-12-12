@@ -41,7 +41,7 @@ comprar_huerto_init (void)
 
   t = find_task_by_pid (pid_inicial);
 
-  if (!t)
+  if (t < 0)
     {
       pid_inicial = 1;
       t = find_task_by_pid (pid_inicial);
@@ -338,8 +338,6 @@ activar_monitoritzacio (int num_crida)
   return 0;
 }
 
-EXPORT_SYMBOL (activar_monitoritzacio);
-
 int
 desactivar_monitoritzacio (int num_crida)
 {
@@ -352,8 +350,6 @@ desactivar_monitoritzacio (int num_crida)
 
   return 0;
 }
-
-EXPORT_SYMBOL (desactivar_monitoritzacio);
 
 void
 reset_info (int pid, struct th_info_est *est)

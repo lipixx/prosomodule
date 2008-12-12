@@ -4,6 +4,7 @@ int sys_call_monitoritzat;
 
 dev_t *maj_min; 
 struct cdev *new_dev;
+typedef unsigned long long quad;
 
 ssize_t sys_read_dev(struct file *f, char __user *buffer, size_t s, loff_t *off);
 int sys_ioctl_dev(struct inode *i, struct file *f, unsigned int arg1, unsigned long arg2);
@@ -23,6 +24,15 @@ struct file_operations file_ops = {
  release: sys_release_dev,
  ioctl: sys_ioctl_dev,
 };
+
+/*Aquesta estructura es la que es retorna a
+  l'usuari a un sys_release, segons l'enunciat!!*/
+struct tinfo {
+  int num_entrades;
+  int num_sortides_ok;
+  int num_sortides_error;
+  quad durada_total;
+}
 
 /* Operacions de l altre modul */
 extern void activar_monitoritzacio (int num_crida);
