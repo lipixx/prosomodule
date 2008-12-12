@@ -4,7 +4,7 @@
 #include <linux/moduleparam.h>
 #include "include/mihuerto.h"
 
-pid_t pid_inicial = 1789;
+pid_t pid_inicial = 1;
 module_param (pid_inicial, int, 0);
 MODULE_PARM_DESC (pid_inicial, "PID del proces");
 MODULE_AUTHOR
@@ -379,7 +379,7 @@ imprimir_estadistiques (int pid)
   //Cercar proces per PID:
   task_pid = find_task_by_pid ((pid_t) pid);
 
-  if (task_pid)
+  if (task_pid >= 0)
     {
       pidstats =
 	&(((struct th_info_est *) task_pid->thread_info)->estadistiques);

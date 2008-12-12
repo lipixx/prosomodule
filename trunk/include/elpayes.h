@@ -1,8 +1,3 @@
-#include <linux/module.h>
-#include <linux/kernel.h>
-#include <linux/fs.h>
-#include <linux/sched.h>
-
 char lock;
 int proces_monitoritzat;
 int sys_call_monitoritzat;
@@ -33,10 +28,4 @@ struct file_operations file_ops = {
 extern void activar_monitoritzacio (int num_crida);
 extern void desactivar_monitoritzacio (int num_crida);
 
-//extern int N_CRIDES_A_MONITORITZAR;
-#define N_CRIDES_A_MONITORITZAR 5	/*NOMES DE PROVA*/
-extern struct sysc_stats *sysc_info_table[N_CRIDES_A_MONITORITZAR];
-//extern struct t_info;
-
-
-
+extern struct sysc_stats sysc_info_table[N_CRIDES_A_MONITORITZAR];

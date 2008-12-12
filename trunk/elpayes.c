@@ -3,10 +3,13 @@
 #include <linux/init.h>
 #include <linux/moduleparam.h>
 #include <linux/cdev.h>
+#include <linux/fs.h>
+#include <linux/sched.h>
+#include "mihuerto.h"
 #include "include/elpayes.h"
 
 MODULE_AUTHOR
-  ("Josep Marti <one.neuron@gmail.com>, Felip Moll <lipixx@gmail.com>");
+  ("Josep Marti <one.neuron@gmail.com>, Felip Moll <lipixx@ciutadella.es>");
 MODULE_DESCRIPTION ("ProSO driver: estadistiques");
 MODULE_LICENSE ("GPL");
 
@@ -46,9 +49,16 @@ salir_del_huerto_exit (void)
 module_init (ir_al_huerto_init);
 module_exit (salir_del_huerto_exit);
 
-ssize_t sys_read_dev(struct file *f, char __user *buffer, size_t s, loff_t *off){
+ssize_t sys_read_dev(struct file *f, char __user *buffer, size_t s, loff_t *off)
+{
+  struct sysc_stats * crida = sysc_info_table[sys_call_monitoritzat];
+  
+  if (s < 0)
+    return -EINVAL;  
+  
   return 0;
 }
+
 int sys_ioctl_dev(struct inode *i, struct file *f, unsigned int arg1, unsigned long arg2){
   return 0;
 }
@@ -97,4 +107,22 @@ desactivar_sys_call (int quina)
     for (i = 0; i < N_CRIDES_A_MONITORITZAR; i++)
       desactivar_monitoritzacio (i);
   return 0;
+}
+
+//Funcio inutil de moment creada per en felip moll marques
+//i dictada per en josep marti pascual el rei de les funcions
+//estupides i sense sentit i inutils, i que repetint ada es fi de puta
+//te un pute vuid.
+void imprimir_estadistiques_sysc(int sysc)
+{
+
+  struct sysc_stats * crida = sysc_info_table[sysc];
+  
+  printk ("    --El Pages --\n");
+  printk ("Num crides   : %i\n", crida->num_crides);
+  printk ("Ret correcte : %i\n", crida->num_fallides);
+  printk ("Ret erroni   : %i\n", crida->num_satisfactories);
+  printk ("Temps total  : %lld\n", crida->temps_execucio);
+  printk ("    -------------\n");
+
 }
