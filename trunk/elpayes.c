@@ -59,7 +59,8 @@ ssize_t sys_read_dev(struct file *f, char __user *buffer, size_t s, loff_t *off)
   return 0;
 }
 
-int sys_ioctl_dev(struct inode *i, struct file *f, unsigned int arg1, unsigned long arg2){
+int sys_ioctl_dev(struct inode *i, struct file *f, unsigned int arg1, unsigned long arg2)
+{
   return 0;
 }
 int sys_open_dev(struct inode *i, struct file *f)
@@ -80,16 +81,32 @@ int sys_release_dev(struct inode *i, struct file *f)
   return 0;
 }
 
-void
-reset_valors (int proces_monitoritzat)
+int
+reset_valors (pid_t pid)
 {
+  struct task_struct * t;
+
+  if (pid < 0) return -EINVAL;
   
+  t = get_task_by_pid(pid);
+  
+  if (t < 0) return -EINVAL; //REPASSAR AQUEST VALOR DE RET
+  reset_info(pid,(struct th_info_est *) t->thread_info);
+
+  return 0;
 }
 
 void
 reset_tots_valors (void)
 {
+  struct task_struct *t;
+  
+  for_each_task(t) 
+  {
+    reset_info(pid,(struct th_info_est *) t->thread_info);
+  }
 
+  return 0;
 }
 
 int
