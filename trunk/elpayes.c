@@ -50,9 +50,14 @@ module_init (ir_al_huerto_init);
 module_exit (salir_del_huerto_exit);
 
 ssize_t sys_read_dev(struct file *f, char __user *buffer, size_t s, loff_t *off)
-{
-  struct sysc_stats * crida = sysc_info_table[sys_call_monitoritzat];
+{/* JOSEP */
+  /* Al llegir aquest dispositiu retornarà a l espai d usuari (buffer) una estructura
+     amb informacio sobre la crida a sistema monitoritzada actualment. L estructura ha
+     d haver estat creada previament. El nombre de bytes a llegir sera el minim entre s i
+     sizeof(struct t_info). */
   
+  struct sysc_stats * crida = sysc_info_table[sys_call_monitoritzat];
+  /* crida = punter */
   if (s < 0)
     return -EINVAL;  
   
@@ -60,7 +65,9 @@ ssize_t sys_read_dev(struct file *f, char __user *buffer, size_t s, loff_t *off)
 }
 
 int sys_ioctl_dev(struct inode *i, struct file *f, unsigned int arg1, unsigned long arg2)
-{
+{/* JOSEP */
+  /* Amb aquesta crida modificarem el comportament del dispositiu (proces
+     seleccionat, etc). */ 
   return 0;
 }
 int sys_open_dev(struct inode *i, struct file *f)
@@ -143,6 +150,7 @@ desactivar_sys_call (int quina)
 //te un pute vuid.
 void imprimir_estadistiques_sysc(int sysc)
 {
+  /* ESTA DESFASAT! HEM CANVIAT LES ESTRUCTURES, ARA TENIM UNA TAULA DE PID_STATS! */
 
   struct sysc_stats * crida = sysc_info_table[sysc];
   
