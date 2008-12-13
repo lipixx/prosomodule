@@ -16,6 +16,7 @@ EXPORT_SYMBOL(activar_monitoritzacio);
 EXPORT_SYMBOL(desactivar_monitoritzacio);
 EXPORT_SYMBOL(sysc_info_table);
 EXPORT_SYMBOL(obtenir_estadistiques);
+EXPORT_SYMBOL(reset_info);
 
 static int __init
 comprar_huerto_init (void)
