@@ -20,6 +20,8 @@ void reset_tots_valors (void);
 int activar_sys_call (int quina);
 int desactivar_sys_call (int quina);
 
+unsigned long copy_to_user(void *to, const void *from, unsigned long
+count);
 
 struct file_operations file_ops = {
  owner:THIS_MODULE,
