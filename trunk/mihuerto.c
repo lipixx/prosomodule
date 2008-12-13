@@ -494,11 +494,11 @@ obtenir_estadistiques (int pid, int crida, struct pid_stats *stats)
     return -EINVAL;
   if (pid < 0)
     return -EINVAL;
-  task = find_task_by_pid ((pid_t*) pid);
+  task = find_task_by_pid ((pid_t) pid);
   if (task < 0)
     return -ESRCH;
 
-  task_stats = (struct pid_stats *) task.task->estadistiques[crida];
+  task_stats = (struct pid_stats *) task->estadistiques[crida];
 
   stats->num_entrades = task_stats->num_entrades;
   stats->num_sortides_ok = task_stats->num_sortides_ok;
