@@ -494,7 +494,7 @@ obtenir_estadistiques (int pid, int crida, struct pid_stats *stats)
     return -EINVAL;
   if (pid < 0)
     return -EINVAL;
-  task = find_task_by_pid ((pid_t) pid);
+  task = (struct th_info_est *) find_task_by_pid ((pid_t) pid);
   if (task < 0)
     return -ESRCH;
 
