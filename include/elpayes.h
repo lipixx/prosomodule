@@ -15,7 +15,7 @@ int pages_ioctl_dev (struct inode *i, struct file *f, unsigned int arg1,
 int pages_open_dev (struct inode *i, struct file *f);
 int pages_release_dev (struct inode *i, struct file *f);
 
-void reset_valors (int pid);
+int reset_valors (int pid);
 void reset_tots_valors (void);
 int activar_sys_call (int quina);
 int desactivar_sys_call (int quina);
@@ -46,4 +46,3 @@ extern void desactivar_monitoritzacio (int num_crida);
 
 extern struct sysc_stats sysc_info_table[N_CRIDES_A_MONITORITZAR];
 extern int obtenir_estadistiques (int pid, int crida, struct pid_stats *info);
-extern pid_inicial;/* casi millor fer-la global no?¿?¿?*/

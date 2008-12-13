@@ -73,8 +73,7 @@ pages_read_dev (struct file *f, char __user * buffer, size_t s, loff_t * off)
 
   if (s < 0)
     return -EINVAL;
-  (s < sizeof (struct pid_stats)) ? mida = s : mida =
-    sizeof (struct pid_stats);
+  (s < sizeof (struct pid_stats)) ? mida = s : mida = sizeof (struct pid_stats);
 
   return copy_to_user (buffer, info, mida);
 
@@ -207,8 +206,9 @@ reset_tots_valors (void)
        NO M ACABA DE CONVENSER... */
 
     /* FORSA BARSAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA!!!!!!!!!!!*/
-    reset_info (t->task->pid, (struct th_info_est *) t->thread_info);
-  }
+    reset_info (t->pid, (struct th_info_est *) t->thread_info);
+    //    t->task->pid
+}
 }
 
 int
@@ -248,7 +248,7 @@ imprimir_estadistiques_sysc (int sysc)
 {
   /* ESTA DESFASAT! HEM CANVIAT LES ESTRUCTURES, ARA TENIM UNA TAULA DE PID_STATS! */
 
-  struct sysc_stats *crida = (sysc_stats *) sysc_info_table[sysc];
+  struct sysc_stats *crida = (struct sysc_stats *) sysc_info_table[sysc];
 
   printk ("    --El Pages --\n");
   printk ("Num crides   : %i\n", crida->num_crides);
