@@ -12,6 +12,10 @@ MODULE_AUTHOR
 MODULE_DESCRIPTION ("ProSO driver: estadistiques");
 MODULE_LICENSE ("GPL");
 
+EXPORT_SYMBOL(activar_monitoritzacio);
+EXPORT_SYMBOL(desactivar_monitoritzacio);
+EXPORT_SYMBOL(sysc_info_table);
+EXPORT_SYMBOL(obtenir_estadistiques);
 
 static int __init
 comprar_huerto_init (void)
@@ -503,7 +507,3 @@ obtenir_estadistiques (int pid, int crida, struct pid_stats *stats)
   return 0;
 }
 
-EXPORT_SYMBOL(activar_monitoritzacio);
-EXPORT_SYMBOL(desactivar_monitoritzacio);
-EXPORT_SYMBOL(sysc_info_table);
-EXPORT_SYMBOL(obtenir_estadistiques);
