@@ -26,7 +26,7 @@ comprar_huerto_init (void)
   /* Guardam les adreces originals de les crides a sistema */
   sys_call_table_originals[OPEN] = sys_call_table[POS_SYSCALL_OPEN];
   sys_call_table_originals[CLOSE] = sys_call_table[POS_SYSCALL_CLOSE];
-  sys_call_table_originals[WRITE] = sys_call_table[POS_SYSCALL_WRITE];
+  sys_call_table_originals[WRITER] = sys_call_table[POS_SYSCALL_WRITE];
   sys_call_table_originals[CLONE] = sys_call_table[POS_SYSCALL_CLONE];
   sys_call_table_originals[LSEEK] = sys_call_table[POS_SYSCALL_LSEEK];
 
