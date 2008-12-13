@@ -44,8 +44,8 @@ comprar_huerto_init (void)
   if (t < 0)
     {
       /*es necessari????????????
-	?????????????????
-	?????????????*/
+         ?????????????????
+         ????????????? */
       pid_inicial = 1;
       t = find_task_by_pid (pid_inicial);
       printk (KERN_DEBUG "El pid no existex, s'agafa el default 1");
@@ -96,9 +96,9 @@ sys_open_local (const char __user * filename, int flags, int mode)
   pidstats = &(thinfo_stats->estadistiques[OPEN]);
 
   //  if (pid != pidstats->pid)
-  if(pid!= thinfo_stats->pid)    
+  if (pid != thinfo_stats->pid)
     reset_info (pid, thinfo_stats);
-  
+
   /*
    * Incrementem el numero de crides per proces i      
    * incrementem el numero de crides a la crida
@@ -115,19 +115,21 @@ sys_open_local (const char __user * filename, int flags, int mode)
   if (resultat >= 0)
     {
       pidstats->num_sortides_ok++;
-      sysc_info_table[OPEN].num_satisfactories++;  
+      sysc_info_table[OPEN].num_satisfactories++;
       thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->num_sortides_ok++;
     }
   else
     {
       pidstats->num_sortides_error++;
       sysc_info_table[OPEN].num_fallides++;
-      thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->num_sortides_error++;
+      thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->
+	num_sortides_error++;
     }
 
   pidstats->durada_total += (final - inici);
   sysc_info_table[OPEN].temps_execucio += (final - inici);
-  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->durada_total +=(final-inici);
+  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->durada_total +=
+    (final - inici);
 
   module_put (THIS_MODULE);
   return resultat;
@@ -151,9 +153,9 @@ sys_close_local (unsigned int fd)
   pidstats = &(thinfo_stats->estadistiques[CLOSE]);
 
   //  if (pid != pidstats->pid)
-  if(pid!= thinfo_stats->pid)
+  if (pid != thinfo_stats->pid)
     reset_info (pid, thinfo_stats);
-  
+
   /*
    * Incrementem el numero de crides per proces i      
    * incrementem el numero de crides a la crida
@@ -178,12 +180,14 @@ sys_close_local (unsigned int fd)
     {
       pidstats->num_sortides_error++;
       sysc_info_table[CLOSE].num_fallides++;
-  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->num_sortides_error++;
+      thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->
+	num_sortides_error++;
     }
 
   pidstats->durada_total += (final - inici);
   sysc_info_table[CLOSE].temps_execucio += (final - inici);
-  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->durada_total += (final-inici);
+  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->durada_total +=
+    (final - inici);
 
   module_put (THIS_MODULE);
   return resultat;
@@ -207,7 +211,7 @@ sys_write_local (unsigned int fd, const char __user * buf, size_t count)
   pidstats = &(thinfo_stats->estadistiques[WRITE]);
 
   //  if (pid != pidstats->pid)
-  if(pid!= thinfo_stats->pid)
+  if (pid != thinfo_stats->pid)
     reset_info (pid, thinfo_stats);
 
   /*
@@ -228,18 +232,20 @@ sys_write_local (unsigned int fd, const char __user * buf, size_t count)
     {
       pidstats->num_sortides_ok++;
       sysc_info_table[WRITE].num_satisfactories++;
-  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->num_sortides_ok++;
+      thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->num_sortides_ok++;
     }
   else
     {
       pidstats->num_sortides_error++;
       sysc_info_table[WRITE].num_fallides++;
-  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->num_sortides_error++;
+      thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->
+	num_sortides_error++;
     }
 
   pidstats->durada_total += (final - inici);
   sysc_info_table[WRITE].temps_execucio += (final - inici);
-  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->durada_total +=(final - inici);
+  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->durada_total +=
+    (final - inici);
 
   module_put (THIS_MODULE);
   return resultat;
@@ -263,7 +269,7 @@ sys_clone_local (struct pt_regs regs)
   pidstats = &(thinfo_stats->estadistiques[CLONE]);
 
   //  if (pid != pidstats->pid)
-  if(pid!= thinfo_stats->pid)
+  if (pid != thinfo_stats->pid)
     reset_info (pid, thinfo_stats);
 
   /*
@@ -283,18 +289,20 @@ sys_clone_local (struct pt_regs regs)
     {
       pidstats->num_sortides_ok++;
       sysc_info_table[CLONE].num_satisfactories++;
-  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->num_sortides_ok++;
+      thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->num_sortides_ok++;
     }
   else
     {
       pidstats->num_sortides_error++;
       sysc_info_table[CLONE].num_fallides++;
-  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->num_sortides_error++;
+      thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->
+	num_sortides_error++;
     }
 
   pidstats->durada_total += (final - inici);
   sysc_info_table[CLONE].temps_execucio += (final - inici);
-  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->durada_total += (final - inici);
+  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->durada_total +=
+    (final - inici);
 
   module_put (THIS_MODULE);
   return resultat;
@@ -318,7 +326,7 @@ sys_lseek_local (unsigned int fd, off_t offset, unsigned int origin)
   pidstats = &(thinfo_stats->estadistiques[LSEEK]);
 
   //  if (pid != pidstats->pid)
-  if(pid!= thinfo_stats->pid)
+  if (pid != thinfo_stats->pid)
     reset_info (pid, thinfo_stats);
 
   /*
@@ -345,12 +353,14 @@ sys_lseek_local (unsigned int fd, off_t offset, unsigned int origin)
     {
       pidstats->num_sortides_error++;
       sysc_info_table[LSEEK].num_fallides++;
-  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->num_sortides_error++;
+      thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->
+	num_sortides_error++;
     }
 
   pidstats->durada_total += (final - inici);
   sysc_info_table[LSEEK].temps_execucio += (final - inici);
-  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->durada_total += (final-inici);
+  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->durada_total +=
+    (final - inici);
 
   module_put (THIS_MODULE);
   return resultat;
@@ -387,19 +397,20 @@ reset_info (pid_t pid, struct th_info_est *est)
 {
   int i;
   struct pid_stats *pidstats;
-  
+
   est->pid = pid;
-  
-  for(i=0; i < N_CRIDES_A_MONITORITZAR+1; i++){
-    
-    pidstats = &(est->estadistiques[i]);
-    
-    /* Re-Inicialitzem les estadistiques */
-    pidstats->num_entrades = 0;
-    pidstats->num_sortides_ok = 0;
-    pidstats->num_sortides_error = 0;
-    pidstats->durada_total = 0;
-  }
+
+  for (i = 0; i < N_CRIDES_A_MONITORITZAR + 1; i++)
+    {
+
+      pidstats = &(est->estadistiques[i]);
+
+      /* Re-Inicialitzem les estadistiques */
+      pidstats->num_entrades = 0;
+      pidstats->num_sortides_ok = 0;
+      pidstats->num_sortides_error = 0;
+      pidstats->durada_total = 0;
+    }
 }
 
 void
@@ -414,56 +425,62 @@ imprimir_estadistiques (int pid)
   if (task_pid >= 0)
     {
       pidstats =
-	&(((struct th_info_est *) task_pid->thread_info)->estadistiques[OPEN]);
-      
+	&(((struct th_info_est *) task_pid->thread_info)->
+	  estadistiques[OPEN]);
+
       /*printk ("    --MiHuerto --\n");
-	printk ("Pid          : %i\n", pidstats->pid);
-	printk ("Num crides   : %i\n", pidstats->num_entrades);
-	printk ("Ret correcte : %i\n", pidstats->num_sortides_ok);
-	printk ("Ret erroni   : %i\n", pidstats-m>num_sortides_error);
-	printk ("Temps total  : %lld\n", pidstats->durada_total);
-	printk ("    -------------\n");*/
-      
+         printk ("Pid          : %i\n", pidstats->pid);
+         printk ("Num crides   : %i\n", pidstats->num_entrades);
+         printk ("Ret correcte : %i\n", pidstats->num_sortides_ok);
+         printk ("Ret erroni   : %i\n", pidstats-m>num_sortides_error);
+         printk ("Temps total  : %lld\n", pidstats->durada_total);
+         printk ("    -------------\n"); */
+
       printk ("    --MiHuerto --\n");
       printk ("Pid               : %i\n\n", pid);
       printk ("Num OPENS         : %i\n", pidstats->num_entrades);
       printk ("Ret opens ok      : %i\n", pidstats->num_sortides_ok);
-      printk ("Ret opens error   : %i\n", pidstats-m>num_sortides_error);
+      printk ("Ret opens error   : %i\n", pidstats - m > num_sortides_error);
       printk ("Temps total opens : %lld\n\n", pidstats->durada_total);
       pidstats =
-	&(((struct th_info_est *) task_pid->thread_info)->estadistiques[CLOSE]);
+	&(((struct th_info_est *) task_pid->thread_info)->
+	  estadistiques[CLOSE]);
       printk ("Num CLOSES         : %i\n", pidstats->num_entrades);
       printk ("Ret closes ok      : %i\n", pidstats->num_sortides_ok);
-      printk ("Ret closes error   : %i\n", pidstats-m>num_sortides_error);
+      printk ("Ret closes error   : %i\n", pidstats - m > num_sortides_error);
       printk ("Temps total closes : %lld\n\n", pidstats->durada_total);
       pidstats =
-	&(((struct th_info_est *) task_pid->thread_info)->estadistiques[WRITE]);
+	&(((struct th_info_est *) task_pid->thread_info)->
+	  estadistiques[WRITE]);
       printk ("Num WRITES         : %i\n", pidstats->num_entrades);
       printk ("Ret writes ok      : %i\n", pidstats->num_sortides_ok);
-      printk ("Ret writes error   : %i\n", pidstats-m>num_sortides_error);
+      printk ("Ret writes error   : %i\n", pidstats - m > num_sortides_error);
       printk ("Temps total writes : %lld\n\n", pidstats->durada_total);
       pidstats =
-	&(((struct th_info_est *) task_pid->thread_info)->estadistiques[CLONE]);
+	&(((struct th_info_est *) task_pid->thread_info)->
+	  estadistiques[CLONE]);
       printk ("Num CLONES         : %i\n", pidstats->num_entrades);
       printk ("Ret clones ok      : %i\n", pidstats->num_sortides_ok);
-      printk ("Ret clones error   : %i\n", pidstats-m>num_sortides_error);
+      printk ("Ret clones error   : %i\n", pidstats - m > num_sortides_error);
       printk ("Temps total clones : %lld\n\n", pidstats->durada_total);
       pidstats =
-	&(((struct th_info_est *) task_pid->thread_info)->estadistiques[LSEEK]);
+	&(((struct th_info_est *) task_pid->thread_info)->
+	  estadistiques[LSEEK]);
       printk ("Num LSEEKS         : %i\n", pidstats->num_entrades);
       printk ("Ret lseeks ok      : %i\n", pidstats->num_sortides_ok);
-      printk ("Ret lseeks error   : %i\n", pidstats-m>num_sortides_error);
+      printk ("Ret lseeks error   : %i\n", pidstats - m > num_sortides_error);
       printk ("Temps total lseeks : %lld\n\n", pidstats->durada_total);
-      
+
       printk ("    -------------\n");
       pidstats =
-	&(((struct th_info_est *) task_pid->thread_info)->estadistiques[N_CRIDES_A_MONITORITZAR]);
+	&(((struct th_info_est *) task_pid->thread_info)->
+	  estadistiques[N_CRIDES_A_MONITORITZAR]);
       printk ("Num TOTAL crides   : %i\n", pidstats->num_entrades);
       printk ("Ret total ok       : %i\n", pidstats->num_sortides_ok);
-      printk ("Ret total error    : %i\n", pidstats-m>num_sortides_error);
+      printk ("Ret total error    : %i\n", pidstats - m > num_sortides_error);
       printk ("Temps total crides : %lld\n\n", pidstats->durada_total);
       printk ("    -------------\n");
-      
+
     }
   else
     printk ("MiHuerto: No such pid\n");
@@ -471,21 +488,26 @@ imprimir_estadistiques (int pid)
 
 EXPORT_SYMBOL (imprimir_estadistiques);
 
-int obtenir_estadistiques(int pid, int crida, struct pid_stats * stats){
-  
-  struct task_struct * task;
-  struct pid_stats * task_stats;
-  
-  if(crida<0 || crida > N_CRIDES_A_MONITORITZAR) return -EINVAL;
-  if(pid<0) return -EINVAL;
-  task= get_task_by_pid((pid_t)pid);
-  if (task<0)return -ESRCH;
-  
-  task_stats=(struct pid_stats *) task->estadistiques[crida];
-  
-  stats->num_entrades=task_stats->num_entrades;
-  stats->num_sortides_ok=task_stats->num_sortides_ok;
-  stats->num_sortides_error=task_stats->num_sortides_error;
-  stats->durada_total=task_stats->durada_total;
+int
+obtenir_estadistiques (int pid, int crida, struct pid_stats *stats)
+{
+
+  struct task_struct *task;
+  struct pid_stats *task_stats;
+
+  if (crida < 0 || crida > N_CRIDES_A_MONITORITZAR)
+    return -EINVAL;
+  if (pid < 0)
+    return -EINVAL;
+  task = get_task_by_pid ((pid_t) pid);
+  if (task < 0)
+    return -ESRCH;
+
+  task_stats = (struct pid_stats *) task->estadistiques[crida];
+
+  stats->num_entrades = task_stats->num_entrades;
+  stats->num_sortides_ok = task_stats->num_sortides_ok;
+  stats->num_sortides_error = task_stats->num_sortides_error;
+  stats->durada_total = task_stats->durada_total;
   return 0;
 }
