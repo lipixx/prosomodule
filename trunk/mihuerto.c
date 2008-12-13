@@ -487,18 +487,18 @@ int
 obtenir_estadistiques (int pid, int crida, struct pid_stats *stats)
 {
 
-  struct th_info_est *task;
+  struct task_struct *task;
   struct pid_stats *task_stats;
 
   if (crida < 0 || crida > N_CRIDES_A_MONITORITZAR)
     return -EINVAL;
   if (pid < 0)
     return -EINVAL;
-  task = (struct th_info_est *) find_task_by_pid ((pid_t) pid);
+  task = find_task_by_pid ((pid_t) pid);
   if (task < 0)
     return -ESRCH;
 
-  task_stats = (struct pid_stats *) (task->estadistiques[crida]);
+  task_stats = (struct th_info_est *) task->thread_info->estadistiques[crida])
 
   stats->num_entrades = task_stats->num_entrades;
   stats->num_sortides_ok = task_stats->num_sortides_ok;
