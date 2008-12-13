@@ -5,7 +5,7 @@
 #include <linux/cdev.h>
 #include <linux/fs.h>
 #include <linux/sched.h>
-#include <linux/errno.h>
+#include <linux/errno.h> /* ?¿?¿? */
 //#include "mihuerto.h"
 #include "include/elpayes.h"
 
@@ -67,7 +67,7 @@ pages_read_dev (struct file *f, char __user * buffer, size_t s, loff_t * off)
   int resultat;
   
   resultat =
-    obtenir_estadistiques (proces_monitoritzat, sys_call_monitoritzat, &info);
+    obtenir_estadistiques (proces_monitoritzat, sys_call_monitoritzat, info);
   if (resultat < 0)
     return resultat;
 
@@ -205,10 +205,10 @@ reset_tots_valors (void)
   {
     /* JA SAPS QUE AQUESTES COSES TAN LLETJES I POC EFICIENTS ME MATEN
        NO M ACABA DE CONVENSER... */
-    reset_info (pid, (struct th_info_est *) t->thread_info);
-  }
 
-  return 0;
+    /* FORSA BARSAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA!!!!!!!!!!!*/
+    reset_info (t->task->pid, (struct th_info_est *) t->thread_info);
+  }
 }
 
 int
@@ -248,7 +248,7 @@ imprimir_estadistiques_sysc (int sysc)
 {
   /* ESTA DESFASAT! HEM CANVIAT LES ESTRUCTURES, ARA TENIM UNA TAULA DE PID_STATS! */
 
-  struct sysc_stats *crida = sysc_info_table[sysc];
+  struct sysc_stats *crida = (sysc_stats *) sysc_info_table[sysc];
 
   printk ("    --El Pages --\n");
   printk ("Num crides   : %i\n", crida->num_crides);
