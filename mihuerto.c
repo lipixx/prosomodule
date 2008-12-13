@@ -502,3 +502,8 @@ obtenir_estadistiques (int pid, int crida, struct pid_stats *stats)
   stats->durada_total = task_stats->durada_total;
   return 0;
 }
+
+EXPORT_SYMBOL(activar_monitoritzacio);
+EXPORT_SYMBOL(desactivar_monitoritzacio);
+EXPORT_SYMBOL(sysc_info_table);
+EXPORT_SYMBOL(obtenir_estadistiques);

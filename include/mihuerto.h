@@ -78,7 +78,3 @@ void reset_info (int pid, struct th_info_est *tinfo_est);
 void imprimir_estadistiques (int pid);
 int obtenir_estadistiques (int pid, int crida, struct pid_stats * stats);
 
-EXPORT_SYMBOL (activar_monitoritzacio);
-EXPORT_SYMBOL (desactivar_monitoritzacio);
-EXPORT_SYMBOL (sysc_info_table);
-EXPORT_SYMBOL (obtenir_estadistiques);
