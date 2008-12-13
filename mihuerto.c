@@ -105,7 +105,7 @@ sys_open_local (const char __user * filename, int flags, int mode)
    */
   pidstats->num_entrades++;
   sysc_info_table[OPEN].num_crides++;
-  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->num_entrades++;
+  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR].num_entrades++;
 
   /* Comptem el temps de la crida */
   inici = proso_get_cycles ();
@@ -116,7 +116,7 @@ sys_open_local (const char __user * filename, int flags, int mode)
     {
       pidstats->num_sortides_ok++;
       sysc_info_table[OPEN].num_satisfactories++;
-      thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->num_sortides_ok++;
+      thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR].num_sortides_ok++;
     }
   else
     {
@@ -128,7 +128,7 @@ sys_open_local (const char __user * filename, int flags, int mode)
 
   pidstats->durada_total += (final - inici);
   sysc_info_table[OPEN].temps_execucio += (final - inici);
-  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->durada_total +=
+  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR].durada_total +=
     (final - inici);
 
   module_put (THIS_MODULE);
@@ -162,7 +162,7 @@ sys_close_local (unsigned int fd)
    */
   pidstats->num_entrades++;
   sysc_info_table[CLOSE].num_crides++;
-  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->num_entrades++;
+  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR].num_entrades++;
 
 
   /* Comptem el temps de la crida */
@@ -174,19 +174,18 @@ sys_close_local (unsigned int fd)
     {
       pidstats->num_sortides_ok++;
       sysc_info_table[CLOSE].num_satisfactories++;
-      thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->num_sortides_ok++;
+      thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR].num_sortides_ok++;
     }
   else
     {
       pidstats->num_sortides_error++;
       sysc_info_table[CLOSE].num_fallides++;
-      thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->
-	num_sortides_error++;
+      thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR].num_sortides_error++;
     }
 
   pidstats->durada_total += (final - inici);
   sysc_info_table[CLOSE].temps_execucio += (final - inici);
-  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->durada_total +=
+  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR].durada_total +=
     (final - inici);
 
   module_put (THIS_MODULE);
@@ -220,7 +219,7 @@ sys_write_local (unsigned int fd, const char __user * buf, size_t count)
    */
   pidstats->num_entrades++;
   sysc_info_table[WRITE].num_crides++;
-  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->num_entrades++;
+  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR].num_entrades++;
 
 
   /* Comptem el temps de la crida */
@@ -232,19 +231,18 @@ sys_write_local (unsigned int fd, const char __user * buf, size_t count)
     {
       pidstats->num_sortides_ok++;
       sysc_info_table[WRITE].num_satisfactories++;
-      thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->num_sortides_ok++;
+      thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR].num_sortides_ok++;
     }
   else
     {
       pidstats->num_sortides_error++;
       sysc_info_table[WRITE].num_fallides++;
-      thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->
-	num_sortides_error++;
+      thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR].num_sortides_error++;
     }
 
   pidstats->durada_total += (final - inici);
   sysc_info_table[WRITE].temps_execucio += (final - inici);
-  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->durada_total +=
+  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR].durada_total +=
     (final - inici);
 
   module_put (THIS_MODULE);
@@ -278,7 +276,7 @@ sys_clone_local (struct pt_regs regs)
    */
   pidstats->num_entrades++;
   sysc_info_table[CLONE].num_crides++;
-  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->num_entrades++;
+  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR].num_entrades++;
 
   /* Comptem el temps de la crida */
   inici = proso_get_cycles ();
@@ -289,19 +287,18 @@ sys_clone_local (struct pt_regs regs)
     {
       pidstats->num_sortides_ok++;
       sysc_info_table[CLONE].num_satisfactories++;
-      thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->num_sortides_ok++;
+      thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR].num_sortides_ok++;
     }
   else
     {
       pidstats->num_sortides_error++;
       sysc_info_table[CLONE].num_fallides++;
-      thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->
-	num_sortides_error++;
+      thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR].num_sortides_error++;
     }
 
   pidstats->durada_total += (final - inici);
   sysc_info_table[CLONE].temps_execucio += (final - inici);
-  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->durada_total +=
+  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR].durada_total +=
     (final - inici);
 
   module_put (THIS_MODULE);
@@ -335,7 +332,7 @@ sys_lseek_local (unsigned int fd, off_t offset, unsigned int origin)
    */
   pidstats->num_entrades++;
   sysc_info_table[LSEEK].num_crides++;
-  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->num_entrades++;
+  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR].num_entrades++;
 
   /* Comptem el temps de la crida */
   inici = proso_get_cycles ();
@@ -346,20 +343,19 @@ sys_lseek_local (unsigned int fd, off_t offset, unsigned int origin)
     {
       pidstats->num_sortides_ok++;
       sysc_info_table[LSEEK].num_satisfactories++;
-      thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->num_sortides_ok++;
+      thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR].num_sortides_ok++;
 
     }
   else
     {
       pidstats->num_sortides_error++;
       sysc_info_table[LSEEK].num_fallides++;
-      thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->
-	num_sortides_error++;
+      thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR].num_sortides_error++;
     }
 
   pidstats->durada_total += (final - inici);
   sysc_info_table[LSEEK].temps_execucio += (final - inici);
-  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->durada_total +=
+  thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR].durada_total +=
     (final - inici);
 
   module_put (THIS_MODULE);
@@ -400,7 +396,7 @@ reset_info (pid_t pid, struct th_info_est *est)
 
   est->pid = pid;
 
-  for (i = 0; i < N_CRIDES_A_MONITORITZAR + 1; i++)
+  for (i = 0; i <= N_CRIDES_A_MONITORITZAR + 1; i++)
     {
 
       pidstats = &(est->estadistiques[i]);
@@ -477,7 +473,7 @@ imprimir_estadistiques (int pid)
 	  estadistiques[N_CRIDES_A_MONITORITZAR]);
       printk ("Num TOTAL crides   : %i\n", pidstats->num_entrades);
       printk ("Ret total ok       : %i\n", pidstats->num_sortides_ok);
-      printk ("Ret total error    : %i\n", pidstats - m > num_sortides_error);
+      printk ("Ret total error    : %i\n", pidstats->num_sortides_error);
       printk ("Temps total crides : %lld\n\n", pidstats->durada_total);
       printk ("    -------------\n");
 
