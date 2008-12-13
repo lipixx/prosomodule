@@ -5,6 +5,7 @@
 #include <linux/cdev.h>
 #include <linux/fs.h>
 #include <linux/sched.h>
+#include <linux/errno.h>
 //#include "mihuerto.h"
 #include "include/elpayes.h"
 
@@ -58,11 +59,13 @@ pages_read_dev (struct file *f, char __user * buffer, size_t s, loff_t * off)
      d haver estat creada previament. El nombre de bytes a llegir sera el minim entre s i
      sizeof(struct t_info). */
 
-  struct sysc_stats *crida = sysc_info_table[sys_call_monitoritzat];
+  /*  struct sysc_stats *crida = sysc_info_table[sys_call_monitoritzat];
+      IMPROVEMENT?¿
+   */  
   struct pid_stats *info;
   size_t mida;
   int resultat;
-
+  
   resultat =
     obtenir_estadistiques (proces_monitoritzat, sys_call_monitoritzat, &info);
   if (resultat < 0)

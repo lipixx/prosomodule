@@ -6,7 +6,7 @@ int sys_call_monitoritzat;
 
 dev_t *maj_min;
 struct cdev *new_dev;
-typedef unsigned long long quad;
+//typedef unsigned long long quad;
 
 ssize_t pages_read_dev (struct file *f, char __user * buffer, size_t s,
 			loff_t * off);
@@ -45,4 +45,4 @@ extern void activar_monitoritzacio (int num_crida);
 extern void desactivar_monitoritzacio (int num_crida);
 
 extern struct sysc_stats sysc_info_table[N_CRIDES_A_MONITORITZAR];
-extern obtenir_estadistiques (int pid, int crida, struct pid_stats *info);
+extern int obtenir_estadistiques (int pid, int crida, struct pid_stats *info);
