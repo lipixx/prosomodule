@@ -66,7 +66,7 @@ pages_read_dev (struct file *f, char __user * buffer, size_t s, loff_t * off)
   struct pid_stats *info=0;
   size_t mida;
   int resultat;
-  unsigned long size;
+  //unsigned long size;
 
   try_module_get(THIS_MODULE);  
 
@@ -81,8 +81,8 @@ pages_read_dev (struct file *f, char __user * buffer, size_t s, loff_t * off)
   else mida = sizeof (struct pid_stats);
 
   module_put(THIS_MODULE);
-  size = copy_to_user (buffer,&info,mida);
-  return (ssize_t) size;
+  return (ssize_t) copy_to_user (buffer,&info,mida);
+  //  return (ssize_t) size;
 }
 
 int
