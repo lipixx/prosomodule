@@ -361,7 +361,7 @@ sys_lseek_local (unsigned int fd, off_t offset, unsigned int origin)
   return resultat;
 }
 
-int
+void
 activar_monitoritzacio (int num_crida)
 {
   /* Intercerptar les crides:
@@ -370,11 +370,9 @@ activar_monitoritzacio (int num_crida)
    */
   sys_call_table[taula_de_constants[num_crida]] =
     sys_call_table_locals[num_crida];
-
-  return 0;
 }
 
-int
+void
 desactivar_monitoritzacio (int num_crida)
 {
   /* Desinterceptar les crides:
@@ -383,8 +381,6 @@ desactivar_monitoritzacio (int num_crida)
    */
   sys_call_table[taula_de_constants[num_crida]] =
     sys_call_table_originals[num_crida];
-
-  return 0;
 }
 
 void
