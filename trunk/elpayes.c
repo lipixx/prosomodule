@@ -63,7 +63,7 @@ pages_read_dev (struct file *f, char __user * buffer, size_t s, loff_t * off)
   /*  struct sysc_stats *crida = sysc_info_table[sys_call_monitoritzat];
       IMPROVEMENT?¿
    */  
-  struct pid_stats *info;
+  struct pid_stats *info=0;
   size_t mida;
   int resultat;
 
