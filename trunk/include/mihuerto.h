@@ -14,6 +14,7 @@
 #define LSEEK  4
 
 typedef unsigned long long quad;
+pid_t pid_inicial;
 
 /* proso_get_cycles serveix per comptar el temps */
 #define proso_rdtsc(low,high) \
