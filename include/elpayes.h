@@ -41,8 +41,8 @@ struct file_operations file_ops = {
   }*/
 
 /* Operacions de l altre modul */
-//extern void activar_monitoritzacio (int num_crida);
-//extern void desactivar_monitoritzacio (int num_crida);
+extern void activar_monitoritzacio (int num_crida);
+extern void desactivar_monitoritzacio (int num_crida);
 
-//extern struct sysc_stats sysc_info_table[N_CRIDES_A_MONITORITZAR];
-//extern int obtenir_estadistiques (int pid, int crida, struct pid_stats *info);
+extern struct sysc_stats sysc_info_table[N_CRIDES_A_MONITORITZAR];
+extern int obtenir_estadistiques (int pid, int crida, struct pid_stats *info);
