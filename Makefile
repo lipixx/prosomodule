@@ -1,4 +1,8 @@
 obj-m += mihuerto.o
+export-objs := activar_monitoritzacio.o. 
+export-objs := activar_monitoritzacio.o. 
+export-objs := activar_monitoritzacio.o. 
+export-objs := activar_monitoritzacio.o. 
 //obj-m += elpayes.o
 
 all:
