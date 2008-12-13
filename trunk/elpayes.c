@@ -73,8 +73,9 @@ pages_read_dev (struct file *f, char __user * buffer, size_t s, loff_t * off)
 
   if (s < 0)
     return -EINVAL;
-  (s < sizeof (struct pid_stats)) ? mida = s : mida = sizeof (struct pid_stats);
-
+  if(s < sizeof (struct pid_stats)) mida = s;
+  else mida = sizeof (struct pid_stats);
+  
   return copy_to_user (buffer, info, mida);
 
 }
@@ -243,12 +244,13 @@ desactivar_sys_call (int quina)
 //i dictada per en josep marti pascual el rei de les funcions
 //estupides i sense sentit i inutils, i que repetint ada es fi de puta
 //te un pute vuid.
-void
+
+/*void
 imprimir_estadistiques_sysc (int sysc)
-{
+{*/
   /* ESTA DESFASAT! HEM CANVIAT LES ESTRUCTURES, ARA TENIM UNA TAULA DE PID_STATS! */
 
-  struct sysc_stats *crida = (struct sysc_stats *) sysc_info_table[sysc];
+/* struct sysc_stats *crida = (struct sysc_stats *) sysc_info_table[sysc];
 
   printk ("    --El Pages --\n");
   printk ("Num crides   : %i\n", crida->num_crides);
@@ -257,4 +259,8 @@ imprimir_estadistiques_sysc (int sysc)
   printk ("Temps total  : %lld\n", crida->temps_execucio);
   printk ("    -------------\n");
 
-}
+}*/
+
+
+
+PD: NO EMPRAM PER RES SA TAULA SYSC_INFO_TABLE !!!!!!!!!!!! IMPROVEMENET!!!!
