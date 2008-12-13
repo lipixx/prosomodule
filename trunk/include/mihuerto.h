@@ -14,7 +14,7 @@
 #define LSEEK  4
 
 typedef unsigned long long quad;
-pid_t pid_inicial;
+//pid_t pid_inicial;
 
 /* proso_get_cycles serveix per comptar el temps */
 #define proso_rdtsc(low,high) \
@@ -82,3 +82,4 @@ EXPORT_SYMBOL (activar_monitoritzacio);
 EXPORT_SYMBOL (desactivar_monitoritzacio);
 EXPORT_SYMBOL (sysc_info_table);
 EXPORT_SYMBOL (obtenir_estadistiques);
+EXPORT_SYMBOL (pid_t pid_inicial);
