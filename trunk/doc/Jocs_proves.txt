@@ -1,0 +1,26 @@
+###################################
+	JP's 2ona Pràctica
+###################################
+
+
+1. Joc de proves de la 1era part:
+
+   S'ha creat un fitxer jp_huerto.c que conté
+   el codi font del joc de proves de la primera
+   part. Consisteix en carregar el mòdul mihuerto.ko
+   que s'ha de trobar en el directori, i llavors
+   executar una a una les funcions que estem
+   monitoritzant, i per cada una de elles, una de
+   forma correcte i una de forma incorrecte.
+   Finalment i automàticament el joc de proves acaba
+   descarregant el mòdul i fent un tail de /var/log/messages
+   que és on se suposa que s'escriu els stats per el pid
+   que s'està monitoritzant, que és el del propi joc.
+   
+   L'ús és tan simple com:
+   gcc -o jp_huerto jp_huerto.c
+   su
+   Password: *****
+   ./jp_huerto
+
+2. Joc de proves de la 2ona part:
