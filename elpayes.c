@@ -80,7 +80,7 @@ pages_read_dev (struct file *f, char __user * buffer, size_t s, loff_t * off)
   else mida = sizeof (struct pid_stats);
 
   module_put(THIS_MODULE);
-  return copy_to_user (buffer, info, mida);
+  return copy_to_user (buffer, &info, mida);
 
 }
 
