@@ -1,3 +1,5 @@
+#include "mihuerto.h"
+
 char lock;
 int proces_monitoritzat;
 int sys_call_monitoritzat;
