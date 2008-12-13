@@ -22,11 +22,11 @@ int desactivar_sys_call (int quina);
 
 
 struct file_operations file_ops = {
-owner:THIS_MODULE,
-read:pages_read_dev,
-open:pages_open_dev,
-release:pages_release_dev,
-ioctl:pages_ioctl_dev,
+ owner:THIS_MODULE,
+ read:pages_read_dev,
+ open:pages_open_dev,
+ release:pages_release_dev,
+ ioctl:pages_ioctl_dev,
 };
 
 /*Aquesta estructura es la que es retorna a
