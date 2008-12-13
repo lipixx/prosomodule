@@ -72,9 +72,9 @@ int sys_clone_local (struct pt_regs regs);
 off_t sys_lseek_local (unsigned int fd, off_t offset, unsigned int origin);
 
 
-void activar_monitoritzacio (int num_crida);
-void desactivar_monitoritzacio (int num_crida);
-void reset_info (int pid, struct th_info_est *tinfo_est);
+extern void activar_monitoritzacio (int num_crida);
+extern void desactivar_monitoritzacio (int num_crida);
+extern void reset_info (int pid, struct th_info_est *tinfo_est);
 void imprimir_estadistiques (int pid);
-int obtenir_estadistiques (int pid, int crida, struct pid_stats * stats);
+extern int obtenir_estadistiques (int pid, int crida, struct pid_stats * stats);
 
