@@ -435,35 +435,35 @@ imprimir_estadistiques (int pid)
       printk ("Pid               : %i\n\n", pid);
       printk ("Num OPENS         : %i\n", pidstats->num_entrades);
       printk ("Ret opens ok      : %i\n", pidstats->num_sortides_ok);
-      printk ("Ret opens error   : %i\n", pidstats - m > num_sortides_error);
+      printk ("Ret opens error   : %i\n", pidstats->num_sortides_error);
       printk ("Temps total opens : %lld\n\n", pidstats->durada_total);
       pidstats =
 	&(((struct th_info_est *) task_pid->thread_info)->
 	  estadistiques[CLOSE]);
       printk ("Num CLOSES         : %i\n", pidstats->num_entrades);
       printk ("Ret closes ok      : %i\n", pidstats->num_sortides_ok);
-      printk ("Ret closes error   : %i\n", pidstats - m > num_sortides_error);
+      printk ("Ret closes error   : %i\n", pidstats->num_sortides_error);
       printk ("Temps total closes : %lld\n\n", pidstats->durada_total);
       pidstats =
 	&(((struct th_info_est *) task_pid->thread_info)->
 	  estadistiques[WRITE]);
       printk ("Num WRITES         : %i\n", pidstats->num_entrades);
       printk ("Ret writes ok      : %i\n", pidstats->num_sortides_ok);
-      printk ("Ret writes error   : %i\n", pidstats - m > num_sortides_error);
+      printk ("Ret writes error   : %i\n", pidstats->num_sortides_error);
       printk ("Temps total writes : %lld\n\n", pidstats->durada_total);
       pidstats =
 	&(((struct th_info_est *) task_pid->thread_info)->
 	  estadistiques[CLONE]);
       printk ("Num CLONES         : %i\n", pidstats->num_entrades);
       printk ("Ret clones ok      : %i\n", pidstats->num_sortides_ok);
-      printk ("Ret clones error   : %i\n", pidstats - m > num_sortides_error);
+      printk ("Ret clones error   : %i\n", pidstats->num_sortides_error);
       printk ("Temps total clones : %lld\n\n", pidstats->durada_total);
       pidstats =
 	&(((struct th_info_est *) task_pid->thread_info)->
 	  estadistiques[LSEEK]);
       printk ("Num LSEEKS         : %i\n", pidstats->num_entrades);
       printk ("Ret lseeks ok      : %i\n", pidstats->num_sortides_ok);
-      printk ("Ret lseeks error   : %i\n", pidstats - m > num_sortides_error);
+      printk ("Ret lseeks error   : %i\n", pidstats->num_sortides_error);
       printk ("Temps total lseeks : %lld\n\n", pidstats->durada_total);
 
       printk ("    -------------\n");
