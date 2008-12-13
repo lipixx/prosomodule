@@ -75,6 +75,7 @@ int activar_monitoritzacio (int num_crida);
 int desactivar_monitoritzacio (int num_crida);
 void reset_info (int pid, struct th_info_est *tinfo_est);
 void imprimir_estadistiques (int pid);
+int obtenir_estadistiques (int pid, int crida, struct pid_stats * stats);
 
 EXPORT_SYMBOL (activar_monitoritzacio);
 EXPORT_SYMBOL (desactivar_monitoritzacio);
