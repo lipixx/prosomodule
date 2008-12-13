@@ -60,8 +60,8 @@ struct th_info_est
 la sys_call_table mitjansant les crides que nosaltres esteim monitoritzant */
 int taula_de_constants[] = { 5, 6, 4, 120, 19 };
 
-static int __init comprar_huerto_init (void);
-static void __exit vender_huerto_exit (void);
+//static int __init comprar_huerto_init (void);
+//static void __exit vender_huerto_exit (void);
 
 
 long sys_open_local (const char __user * filename, int flags, int mode);
