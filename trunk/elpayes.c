@@ -5,7 +5,7 @@
 #include <linux/cdev.h>
 #include <linux/fs.h>
 #include <linux/sched.h>
-#include "mihuerto.h"
+//#include "mihuerto.h"
 #include "include/elpayes.h"
 
 MODULE_AUTHOR
@@ -64,7 +64,7 @@ pages_read_dev (struct file *f, char __user * buffer, size_t s, loff_t * off)
   int resultat;
 
   resultat =
-    obtenir_estadistiques (proces_monitoritzat, sys_call_monitoritzat, info);
+    obtenir_estadistiques (proces_monitoritzat, sys_call_monitoritzat, &info);
   if (resultat < 0)
     return resultat;
 
@@ -102,7 +102,7 @@ pages_ioctl_dev (struct inode *i, struct file *f, unsigned int arg1,
       /* NI IDEA SI ES REFEREIX A N AIXO S ENUNCIAT... */
       else
 	{
-	  task = get_task_by_pid ((pid_t) arg2);
+	  task = find_task_by_pid ((pid_t) arg2);
 	  if (task < 0)
 	    return -ESRCH;
 	  proces_monitoritzat = arg2;
