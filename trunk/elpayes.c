@@ -49,28 +49,91 @@ salir_del_huerto_exit (void)
 module_init (ir_al_huerto_init);
 module_exit (salir_del_huerto_exit);
 
-ssize_t sys_read_dev(struct file *f, char __user *buffer, size_t s, loff_t *off)
-{/* JOSEP */
-  /* Al llegir aquest dispositiu retornarà a l espai d usuari (buffer) una estructura
+ssize_t pages_read_dev(struct file *f, char __user *buffer, size_t s, loff_t *off)
+{
+  /* Al llegir aquest dispositiu retornara a l espai d usuari (buffer) una estructura
      amb informacio sobre la crida a sistema monitoritzada actualment. L estructura ha
      d haver estat creada previament. El nombre de bytes a llegir sera el minim entre s i
      sizeof(struct t_info). */
   
   struct sysc_stats * crida = sysc_info_table[sys_call_monitoritzat];
-  /* crida = punter */
-  if (s < 0)
-    return -EINVAL;  
+  struct pid_stats * info;
+  size_t mida;
+  int resultat;
   
-  return 0;
+  resultat = obtenir_estadistiques(proces_monitoritzat,sys_call_monitoritzat,info);  
+  if(resultat<0)return resultat;
+  
+  if(s<0) return -EINVAL;
+  (s<sizeof(struct pid_stats))?mida=s:mida=sizeof(struct pid_stats);
+  
+  return  copy_to_user(buffer, info, mida); 
+  
 }
 
-int sys_ioctl_dev(struct inode *i, struct file *f, unsigned int arg1, unsigned long arg2)
+int pages_ioctl_dev(struct inode *i, struct file *f, unsigned int arg1, unsigned long arg2)
 {/* JOSEP */
   /* Amb aquesta crida modificarem el comportament del dispositiu (proces
      seleccionat, etc). */ 
+  struct task_struct * task;
+
+  /*
+    PREGUNTA:   NECESSITAM FER CAP COPY_FROM_USER ?¿ per agafar es parametres o ho podem fer a saco?
+   */
+  switch(arg1){
+  case 0:  
+    /*CANVI PROCES (arg1=0) El parametre arg2 indica, per referencia, el nou
+      identificador de proces que cal analitzar. Si el punter es NULL, vol dir que cal
+      tornar al proces que ha realitzat l open. Si el proces no existeix cal retornar
+      error.*/
+    if(arg2<0) return -EINVAL;    
+    if(arg2==0) proces_monitoritzat=proces_incial;
+    /* NI IDEA SI ES REFEREIX A N AIXO S ENUNCIAT...*/
+    else{
+      task = get_task_by_pid((pid_t)arg2);
+      if(task<0) return -ESRCH;
+      proces_monitoritzat=arg2;
+    }
+    break;
+  case 1:
+    /* CANVI SYSCALL (arg1=1) Permet canviar la crida de la que consultem les
+       estadistiques. El parametre arg2 indica:
+       • OPEN (0)
+       • WRITE (1)
+       • LSEEK (2)
+       • CLOSE (3)
+       • CLONE (4)*/
+    if(arg2<0 || arg2>N_CRIDES_A_MONITORITZAR) return -EINVAL;
+    sys_call_monitoritzat=arg2;
+    break;
+  case 2:
+    /* RESET_VALORS (arg1=2) Posa a zero els valors del proces que s esta
+       analitzant en aquest moment.*/
+    reset_valors(proces_monitoritzat);
+    break;
+  case 3:
+    /* RESET_VALORS_TOTS_PROCESSOS (arg1=3) Posa a zero els valors de tots els
+       processos que s estan analitzant.*/
+    reset_tots_valors();
+    break;
+  case 4:
+    if(arg2<-1 || arg2>N_CRIDES_A_MONITORITZAR) return -EINVAL;
+    /* Cal tenir present que si arg2=-1 s activaran totes les sys_calls */
+    activar_sys_call(arg2);
+    break;
+  case 5:
+    if(arg2<-1 || arg2>N_CRIDES_A_MONITORITZAR) return -EINVAL;
+    /* Cal tenir present que si arg2=-1 es desactivaran totes les sys_calls */
+    desactivar_sys_call(arg2);
+    break;
+  default:
+    /* Parametre incorrecte */
+    return -EINVAL;
+    break;  
+  }
   return 0;
 }
-int sys_open_dev(struct inode *i, struct file *f)
+int pages_open_dev(struct inode *i, struct file *f)
 {
   if (lock) return -EPERM;
   if (current->uid) return -EACCES;
@@ -79,7 +142,7 @@ int sys_open_dev(struct inode *i, struct file *f)
   
   return 0;  
 }   
-int sys_release_dev(struct inode *i, struct file *f)
+int pages_release_dev(struct inode *i, struct file *f)
 {
   
   if (!lock) return -EPERM;
@@ -98,6 +161,8 @@ reset_valors (pid_t pid)
   t = get_task_by_pid(pid);
   
   if (t < 0) return -EINVAL; //REPASSAR AQUEST VALOR DE RET
+  /* QUE TROBES SI: return -ESRCH ?¿
+     PD: bsos */
   reset_info(pid,(struct th_info_est *) t->thread_info);
 
   return 0;
@@ -110,6 +175,8 @@ reset_tots_valors (void)
   
   for_each_task(t) 
   {
+    /* JA SAPS QUE AQUESTES COSES TAN LLETJES I POC EFICIENTS ME MATEN
+       NO M ACABA DE CONVENSER...*/
     reset_info(pid,(struct th_info_est *) t->thread_info);
   }
 

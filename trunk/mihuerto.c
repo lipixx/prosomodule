@@ -43,6 +43,9 @@ comprar_huerto_init (void)
 
   if (t < 0)
     {
+      /*es necessari????????????
+	?????????????????
+	?????????????*/
       pid_inicial = 1;
       t = find_task_by_pid (pid_inicial);
       printk (KERN_DEBUG "El pid no existex, s'agafa el default 1");
@@ -467,3 +470,22 @@ imprimir_estadistiques (int pid)
 }
 
 EXPORT_SYMBOL (imprimir_estadistiques);
+
+int obtenir_estadistiques(int pid, int crida, struct pid_stats * stats){
+  
+  struct task_struct * task;
+  struct pid_stats * task_stats;
+  
+  if(crida<0 || crida > N_CRIDES_A_MONITORITZAR) return -EINVAL;
+  if(pid<0) return -EINVAL;
+  task= get_task_by_pid((pid_t)pid);
+  if (task<0)return -ESRCH;
+  
+  task_stats=(struct pid_stats *) task->estadistiques[crida];
+  
+  stats->num_entrades=task_stats->num_entrades;
+  stats->num_sortides_ok=task_stats->num_sortides_ok;
+  stats->num_sortides_error=task_stats->num_sortides_error;
+  stats->durada_total=task_stats->durada_total;
+  return 0;
+}
