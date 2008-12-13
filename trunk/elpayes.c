@@ -101,7 +101,7 @@ pages_ioctl_dev (struct inode *i, struct file *f, unsigned int arg1,
       if (arg2 < 0)
 	return -EINVAL;
       if (arg2 == 0)
-	proces_monitoritzat = proces_incial;
+	proces_monitoritzat = pid_inicial;
       /* NI IDEA SI ES REFEREIX A N AIXO S ENUNCIAT... */
       else
 	{
@@ -185,7 +185,7 @@ reset_valors (pid_t pid)
   if (pid < 0)
     return -EINVAL;
 
-  t = get_task_by_pid (pid);
+  t = find_task_by_pid (pid);
 
   if (t < 0)
     return -EINVAL;		//REPASSAR AQUEST VALOR DE RET
@@ -201,7 +201,7 @@ reset_tots_valors (void)
 {
   struct task_struct *t;
 
-  for_each_task (t)
+  for_each_process (t)
   {
     /* JA SAPS QUE AQUESTES COSES TAN LLETJES I POC EFICIENTS ME MATEN
        NO M ACABA DE CONVENSER... */
