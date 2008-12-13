@@ -122,8 +122,7 @@ sys_open_local (const char __user * filename, int flags, int mode)
     {
       pidstats->num_sortides_error++;
       sysc_info_table[OPEN].num_fallides++;
-      thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR]->
-	num_sortides_error++;
+      thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR].num_sortides_error++;
     }
 
   pidstats->durada_total += (final - inici);
