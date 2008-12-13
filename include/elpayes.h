@@ -27,12 +27,14 @@ struct file_operations file_ops = {
 
 /*Aquesta estructura es la que es retorna a
   l'usuari a un sys_release, segons l'enunciat!!*/
-struct tinfo {
+/* Crec que val mes no repetir coses, aixo ja ho tenim a mihuerto */
+/* A s enunciat posa t_info, i a mihuerto empram pid_stats */
+/*struct tinfo {
   int num_entrades;
   int num_sortides_ok;
   int num_sortides_error;
   quad durada_total;
-}
+  }*/
 
 /* Operacions de l altre modul */
 extern void activar_monitoritzacio (int num_crida);

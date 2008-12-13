@@ -33,7 +33,7 @@ proso_get_cycles (void)
 
 struct pid_stats
 {
-  int pid;
+  //int pid;
   int num_entrades;
   int num_sortides_ok;
   int num_sortides_error;
@@ -51,7 +51,8 @@ struct sysc_stats
 struct th_info_est
 {
   struct thread_info info_th;
-  struct pid_stats estadistiques;
+  struct pid_stats estadistiques[N_CRIDES_A_MONITORITZAR+1]; /* +1 pq aixi en aquesta posicio guardarem les estadistiques globals del proces */
+  int pid; /* pid nomes s utilitza per comprovar que les estadistiques guardades son del proces que toca*/
 };
 
 /* Aquesta taula serveix per poder fer referencia a la posicio de 
