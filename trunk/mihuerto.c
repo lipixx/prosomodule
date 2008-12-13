@@ -496,9 +496,9 @@ obtenir_estadistiques (int pid, int crida, struct pid_stats *stats)
 
   task_stats = (struct pid_stats ) task->estadistiques[crida];
 
-  stats->num_entrades = task_stats->num_entrades;
-  stats->num_sortides_ok = task_stats->num_sortides_ok;
-  stats->num_sortides_error = task_stats->num_sortides_error;
-  stats->durada_total = task_stats->durada_total;
+  stats->num_entrades = task_stats.num_entrades;
+  stats->num_sortides_ok = task_stats.num_sortides_ok;
+  stats->num_sortides_error = task_stats.num_sortides_error;
+  stats->durada_total = task_stats.durada_total;
   return 0;
 }
