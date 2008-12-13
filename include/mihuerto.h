@@ -79,3 +79,4 @@ void imprimir_estadistiques (int pid);
 EXPORT_SYMBOL(activar_monitoritzacio);
 EXPORT_SYMBOL(desactivar_monitoritzacio);
 EXPORT_SYMBOL(sysc_info_table);
+EXPORT_SYMBOL(obtenir_estadistiques);
