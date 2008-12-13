@@ -33,14 +33,14 @@ comprar_huerto_init (void)
   /* Guardem les adreces de les funcions locals a la taula sys_call_table_locals */
   sys_call_table_locals[OPEN] = sys_open_local;
   sys_call_table_locals[CLOSE] = sys_close_local;
-  sys_call_table_locals[WRITE] = sys_write_local;
+  sys_call_table_locals[WRITER] = sys_write_local;
   sys_call_table_locals[CLONE] = sys_clone_local;
   sys_call_table_locals[LSEEK] = sys_lseek_local;
 
   /* Redireccionam les crides a sistema amb les adreces de les nostres crides monitoritzades */
   sys_call_table[POS_SYSCALL_OPEN] = sys_call_table_locals[OPEN];
   sys_call_table[POS_SYSCALL_CLOSE] = sys_call_table_locals[CLOSE];
-  sys_call_table[POS_SYSCALL_WRITE] = sys_call_table_locals[WRITE];
+  sys_call_table[POS_SYSCALL_WRITE] = sys_call_table_locals[WRITER];
   sys_call_table[POS_SYSCALL_CLONE] = sys_call_table_locals[CLONE];
   sys_call_table[POS_SYSCALL_LSEEK] = sys_call_table_locals[LSEEK];
 
@@ -70,7 +70,7 @@ vender_huerto_exit (void)
   /* Restauram les crides a sistema amb les adreces de les nostres crides monitoritzades */
   sys_call_table[POS_SYSCALL_OPEN] = sys_call_table_originals[OPEN];
   sys_call_table[POS_SYSCALL_CLOSE] = sys_call_table_originals[CLOSE];
-  sys_call_table[POS_SYSCALL_WRITE] = sys_call_table_originals[WRITE];
+  sys_call_table[POS_SYSCALL_WRITE] = sys_call_table_originals[WRITER];
   sys_call_table[POS_SYSCALL_CLONE] = sys_call_table_originals[CLONE];
   sys_call_table[POS_SYSCALL_LSEEK] = sys_call_table_originals[LSEEK];
 
@@ -208,10 +208,10 @@ sys_write_local (unsigned int fd, const char __user * buf, size_t count)
 
   try_module_get (THIS_MODULE);
 
-  crida = sys_call_table_originals[WRITE];
+  crida = sys_call_table_originals[WRITER];
   thinfo_stats = (struct th_info_est *) current_thread_info ();
   pid = current_thread_info ()->task->pid;
-  pidstats = &(thinfo_stats->estadistiques[WRITE]);
+  pidstats = &(thinfo_stats->estadistiques[WRITER]);
 
   //  if (pid != pidstats->pid)
   if (pid != thinfo_stats->pid)
@@ -222,7 +222,7 @@ sys_write_local (unsigned int fd, const char __user * buf, size_t count)
    * incrementem el numero de crides a la crida
    */
   pidstats->num_entrades++;
-  sysc_info_table[WRITE].num_crides++;
+  sysc_info_table[WRITER].num_crides++;
   thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR].num_entrades++;
 
 
@@ -234,18 +234,18 @@ sys_write_local (unsigned int fd, const char __user * buf, size_t count)
   if (resultat >= 0)
     {
       pidstats->num_sortides_ok++;
-      sysc_info_table[WRITE].num_satisfactories++;
+      sysc_info_table[WRITER].num_satisfactories++;
       thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR].num_sortides_ok++;
     }
   else
     {
       pidstats->num_sortides_error++;
-      sysc_info_table[WRITE].num_fallides++;
+      sysc_info_table[WRITER].num_fallides++;
       thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR].num_sortides_error++;
     }
 
   pidstats->durada_total += (final - inici);
-  sysc_info_table[WRITE].temps_execucio += (final - inici);
+  sysc_info_table[WRITER].temps_execucio += (final - inici);
   thinfo_stats->estadistiques[N_CRIDES_A_MONITORITZAR].durada_total +=
     (final - inici);
 
@@ -447,7 +447,7 @@ imprimir_estadistiques (int pid)
       printk ("Temps total closes : %lld\n\n", pidstats->durada_total);
       pidstats =
 	&(((struct th_info_est *) task_pid->thread_info)->
-	  estadistiques[WRITE]);
+	  estadistiques[WRITER]);
       printk ("Num WRITES         : %i\n", pidstats->num_entrades);
       printk ("Ret writes ok      : %i\n", pidstats->num_sortides_ok);
       printk ("Ret writes error   : %i\n", pidstats->num_sortides_error);

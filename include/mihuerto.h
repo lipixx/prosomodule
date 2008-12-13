@@ -7,11 +7,11 @@
 #define N_CRIDES_A_MONITORITZAR 5
 #define MAX_PIDS_MONITORITZATS 1000
 
-#define OPEN   0
-#define CLOSE  1
-#define WRITE  2
-#define CLONE  3
-#define LSEEK  4
+#define OPEN    0
+#define CLOSE   1
+#define WRITER  2
+#define CLONE   3
+#define LSEEK   4
 
 typedef unsigned long long quad;
 pid_t pid_inicial;
