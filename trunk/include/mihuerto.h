@@ -46,13 +46,13 @@ struct sysc_stats
   int num_fallides;
   int num_satisfactories;
   quad temps_execucio;
-}sysc_info_table[N_CRIDES_A_MONITORITZAR];
+} sysc_info_table[N_CRIDES_A_MONITORITZAR];
 
 struct th_info_est
 {
   struct thread_info info_th;
-  struct pid_stats estadistiques[N_CRIDES_A_MONITORITZAR+1]; /* +1 pq aixi en aquesta posicio guardarem les estadistiques globals del proces */
-  int pid; /* pid nomes s utilitza per comprovar que les estadistiques guardades son del proces que toca*/
+  struct pid_stats estadistiques[N_CRIDES_A_MONITORITZAR + 1];	/* +1 pq aixi en aquesta posicio guardarem les estadistiques globals del proces */
+  int pid;			/* pid nomes s utilitza per comprovar que les estadistiques guardades son del proces que toca */
 };
 
 /* Aquesta taula serveix per poder fer referencia a la posicio de 
@@ -76,7 +76,7 @@ int desactivar_monitoritzacio (int num_crida);
 void reset_info (int pid, struct th_info_est *tinfo_est);
 void imprimir_estadistiques (int pid);
 
-EXPORT_SYMBOL(activar_monitoritzacio);
-EXPORT_SYMBOL(desactivar_monitoritzacio);
-EXPORT_SYMBOL(sysc_info_table);
-EXPORT_SYMBOL(obtenir_estadistiques);
+EXPORT_SYMBOL (activar_monitoritzacio);
+EXPORT_SYMBOL (desactivar_monitoritzacio);
+EXPORT_SYMBOL (sysc_info_table);
+EXPORT_SYMBOL (obtenir_estadistiques);
