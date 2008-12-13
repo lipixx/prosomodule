@@ -51,12 +51,13 @@ salir_del_huerto_exit (void)
 module_init (ir_al_huerto_init);
 module_exit (salir_del_huerto_exit);
 
+
 ssize_t
 pages_read_dev (struct file *f, char __user * buffer, size_t s, loff_t * off)
 {
   /* Al llegir aquest dispositiu retornara a l espai d usuari (buffer) una estructura
      amb informacio sobre la crida a sistema monitoritzada actualment. L estructura ha
-     d haver estat creada previament. El nombre de bytes a llegir sera el minim entre s i
+     d'haver estat creada previament. El nombre de bytes a llegir sera el minim entre s i
      sizeof(struct t_info). */
 
   /*  struct sysc_stats *crida = sysc_info_table[sys_call_monitoritzat];
@@ -65,7 +66,9 @@ pages_read_dev (struct file *f, char __user * buffer, size_t s, loff_t * off)
   struct pid_stats *info;
   size_t mida;
   int resultat;
-  
+
+  try_module_get(THIS_MODULE);  
+
   resultat =
     obtenir_estadistiques (proces_monitoritzat, sys_call_monitoritzat, info);
   if (resultat < 0)
@@ -75,7 +78,8 @@ pages_read_dev (struct file *f, char __user * buffer, size_t s, loff_t * off)
     return -EINVAL;
   if(s < sizeof (struct pid_stats)) mida = s;
   else mida = sizeof (struct pid_stats);
-  
+
+  module_put(THIS_MODULE);
   return copy_to_user (buffer, info, mida);
 
 }
@@ -150,29 +154,38 @@ pages_ioctl_dev (struct inode *i, struct file *f, unsigned int arg1,
       return -EINVAL;
       break;
     }
+ try_module_get(THIS_MODULE);
+ module_put(THIS_MODULE);
   return 0;
 }
 
 int
 pages_open_dev (struct inode *i, struct file *f)
 {
-  if (lock)
-    return -EPERM;
-  if (current->uid)
-    return -EACCES;
 
+  try_module_get(THIS_MODULE);
+
+  if (lock) return -EPERM;
+  if (current->uid) return -EACCES;
   lock++;
 
+  module_put(THIS_MODULE);
+   
+  return 0;  
+}   
+int sys_release_dev(struct inode *i, struct file *f)
+{
   return 0;
 }
 
 int
 pages_release_dev (struct inode *i, struct file *f)
 {
-
-  if (!lock)
-    return -EPERM;
+  try_module_get(THIS_MODULE);
+  if (!lock) return -EPERM;
   lock--;
+
+  module_put(THIS_MODULE);
 
   return 0;
 }
@@ -180,7 +193,7 @@ pages_release_dev (struct inode *i, struct file *f)
 int
 reset_valors (pid_t pid)
 {
-  struct task_struct *t;
+  struct task_struct * t;
 
   if (pid < 0)
     return -EINVAL;
