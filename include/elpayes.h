@@ -1,4 +1,4 @@
-#include "mihuerto.h"
+//#include "mihuerto.h"
 
 char lock;
 int proces_monitoritzat;
