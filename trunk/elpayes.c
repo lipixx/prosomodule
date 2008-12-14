@@ -91,7 +91,7 @@ pages_read_dev (struct file *f, char __user * buffer, size_t s, loff_t * off)
   int resultat;
   //unsigned long size;
 
-  try_module_get(THIS_MODULE);  
+  //try_module_get(THIS_MODULE);  
 
   resultat =
     obtenir_estadistiques (proces_monitoritzat, sys_call_monitoritzat, &info);
@@ -103,8 +103,9 @@ pages_read_dev (struct file *f, char __user * buffer, size_t s, loff_t * off)
   if(s < sizeof (struct pid_stats)) mida = s;
   else mida = sizeof (struct pid_stats);
 
-  module_put(THIS_MODULE);
+
   printk(KERN_DEBUG"\nhola\n%i%i%i%lld",info.num_entrades,info.num_sortides_ok,info.num_sortides_error,info.durada_total);
+  //module_put(THIS_MODULE);
   return (ssize_t) copy_to_user (buffer,&info,mida);
   //  return (ssize_t) size;
 }
@@ -119,7 +120,7 @@ pages_ioctl_dev (struct inode *i, struct file *f, unsigned int arg1,
   struct task_struct *task;
   struct th_info_est *thinfo_stats;
   
-  try_module_get(THIS_MODULE);
+  //try_module_get(THIS_MODULE);
   
   /*
     PREGUNTA:   NECESSITAM FER CAP COPY_FROM_USER ?¿ per agafar es parametres o ho podem fer a saco?
@@ -190,7 +191,7 @@ pages_ioctl_dev (struct inode *i, struct file *f, unsigned int arg1,
       return -EINVAL;
       break;
     }
- module_put(THIS_MODULE);
+  //module_put(THIS_MODULE);
   return 0;
 }
 
@@ -198,13 +199,13 @@ int
 pages_open_dev (struct inode *i, struct file *f)
 {
 
-  try_module_get(THIS_MODULE);
+  //try_module_get(THIS_MODULE);
   printk("\nEN FELIP ES UN PUTA GAY DE MERDA\n lock: %i",lock);
   if (lock!=0) return -EPERM;
   if (current->uid!=0) return -EACCES;
   lock++;
 
-  module_put(THIS_MODULE);
+  // module_put(THIS_MODULE);
    
   return 0;  
 }   
@@ -212,11 +213,11 @@ pages_open_dev (struct inode *i, struct file *f)
 int
 pages_release_dev (struct inode *i, struct file *f)
 {
-  try_module_get(THIS_MODULE);
+  //try_module_get(THIS_MODULE);
   if (!lock) return -EPERM;
   lock--;
 
-  module_put(THIS_MODULE);
+  //module_put(THIS_MODULE);
 
   return 0;
 }
