@@ -14,7 +14,7 @@ MODULE_AUTHOR
 MODULE_DESCRIPTION ("ProSO driver: estadistiques");
 MODULE_LICENSE ("GPL");
 
-int lock=0;
+int lock=1;
 
 /* Inicialitzacio del modul. */
 
@@ -50,7 +50,7 @@ ir_al_huerto_init (void)
     printk("ERROR: cdev_add");
     return result;
   }
-  lock = 0;
+  lock = 1;
 
   /*major=MAJOR(maj_min);
   minor=MINOR(maj_min);
