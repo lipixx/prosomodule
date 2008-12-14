@@ -506,13 +506,16 @@ obtenir_estadistiques (int pid, int crida, struct pid_stats *stats)
     return -ESRCH;
 
   task_stats = (struct pid_stats *) &(task->estadistiques[0]);
+  
+  stats=&task_stats;
+  
   printk(KERN_DEBUG "\n1=%i\n2=%i\n3=%i\n4=%lld\n\n",task_stats->num_entrades,task_stats->num_sortides_ok,task_stats->num_sortides_error,task_stats->durada_total);
-
-  stats->num_entrades = task_stats->num_entrades;
-  stats->num_sortides_ok = task_stats->num_sortides_ok;
-  stats->num_sortides_error = task_stats->num_sortides_error;
-  stats->durada_total = task_stats->durada_total;
-
+  
+  /* stats->num_entrades = task_stats->num_entrades;
+     stats->num_sortides_ok = task_stats->num_sortides_ok;
+     stats->num_sortides_error = task_stats->num_sortides_error;
+     stats->durada_total = task_stats->durada_total;
+  */
   printk(KERN_EMERG"\n1=%i\n2=%i\n3=%i\n4=%lld\n\n",stats->num_entrades,stats->num_sortides_ok,stats->num_sortides_error,stats->durada_total);
   return 0;
 }
