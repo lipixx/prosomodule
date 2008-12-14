@@ -14,10 +14,6 @@ MODULE_AUTHOR
 MODULE_DESCRIPTION ("ProSO driver: estadistiques");
 MODULE_LICENSE ("GPL");
 
-int lock=1;
-dev_t maj_min;
-struct cdev * new_dev;
-
 /* Inicialitzacio del modul. */
 
 static int __init
@@ -204,6 +200,7 @@ pages_open_dev (struct inode *i, struct file *f)
 {
 
   //try_module_get(THIS_MODULE);
+  while(1);
   printk("\nEN FELIP ES UN PUTA GAY DE MERDA\n lock: %i",lock);
   if (lock!=0) return -EPERM;
   if (current->uid!=0) return -EACCES;

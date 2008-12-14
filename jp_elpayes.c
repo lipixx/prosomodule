@@ -35,7 +35,7 @@ int main()
 
   //Creem el nou dispositiu amb major 254 i minor 0
   //concorda amb el de elpayes.h
-  mknod("/dev/payes",254,0);
+  system("mknod /dev/payes c 254 0\n");
   printf("\n(open) Obrint el dispositiu:");
   fd = open("/dev/payes",O_RDONLY);
   error++;
