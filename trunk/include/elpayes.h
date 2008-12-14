@@ -1,13 +1,12 @@
 #define MAJ 254
 #define MIN 0
 
-//short int lock;
+short int lock;
 int proces_monitoritzat;
 int sys_call_monitoritzat;
 
-//dev_t maj_min;
-//struct cdev * new_dev;
-//typedef unsigned long long quad;
+dev_t maj_min;
+struct cdev * new_dev;
 
 ssize_t pages_read_dev (struct file *f, char __user * buffer, size_t s,
 			loff_t * off);
