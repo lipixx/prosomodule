@@ -1,4 +1,3 @@
-//#include "mihuerto.h"
 #define MAJ 254
 #define MIN 0
 

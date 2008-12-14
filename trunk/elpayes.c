@@ -50,10 +50,10 @@ ir_al_huerto_init (void)
   }
   lock = 0;
 
-  major=MAJOR(maj_min);
+  /*major=MAJOR(maj_min);
   minor=MINOR(maj_min);
   printk("\nMAJMIN: %i %i\n",major,minor);
-
+  */
   printk (KERN_DEBUG
 	  "El pages arriba ben descansat a l'hort, preparat per una dura jornada de feina\n");
 
@@ -115,47 +115,58 @@ pages_ioctl_dev (struct inode *i, struct file *f, unsigned int arg1,
 {				/* JOSEP */
   /* Amb aquesta crida modificarem el comportament del dispositiu (proces
      seleccionat, etc). */
+  int p, res;
   struct task_struct *task;
-
+  struct th_info_est *thinfo_stats;
+  
+  try_module_get(THIS_MODULE);
+  
   /*
-     PREGUNTA:   NECESSITAM FER CAP COPY_FROM_USER ?¿ per agafar es parametres o ho podem fer a saco?
-   */
+    PREGUNTA:   NECESSITAM FER CAP COPY_FROM_USER ?¿ per agafar es parametres o ho podem fer a saco?
+  */
   switch (arg1)
     {
     case 0:
       /*CANVI PROCES (arg1=0) El parametre arg2 indica, per referencia, el nou
-         identificador de proces que cal analitzar. Si el punter es NULL, vol dir que cal
-         tornar al proces que ha realitzat l open. Si el proces no existeix cal retornar
-         error. */
+	identificador de proces que cal analitzar. Si el punter es NULL, vol dir que cal
+	tornar al proces que ha realitzat l open. Si el proces no existeix cal retornar
+	error. */
       if (arg2 < 0)
 	return -EINVAL;
-      if (arg2 == 0)
+      task = find_task_by_pid();
+      if (task == NULL)
 	proces_monitoritzat = pid;
-      /* NI IDEA SI ES REFEREIX A N AIXO S ENUNCIAT... */
       else
 	{
 	  task = find_task_by_pid ((pid_t) arg2);
-	  if (task < 0)
+	  if (task == NULL)
 	    return -ESRCH;
+	  
+	  thinfo_stats = (struct th_info_est *) task;
+	  //p = current_thread_info ()->task->pid;
+	  
+	  if (arg2 != thinfo_stats->pid)
+	    reset_info ((pid_t)arg2, thinfo_stats);
+	  
 	  proces_monitoritzat = arg2;
 	}
       break;
     case 1:
       /* CANVI SYSCALL (arg1=1) Permet canviar la crida de la que consultem les
-         estadistiques. El parametre arg2 indica:
-         • OPEN (0)
-         • WRITE (1)
-         • LSEEK (2)
-         • CLOSE (3)
-         • CLONE (4) */
-      if (arg2 < 0 || arg2 > N_CRIDES_A_MONITORITZAR)
+	 estadistiques. El parametre arg2 indica:
+	 • OPEN (0)
+	 • WRITE (1)
+	 • LSEEK (2)
+	 • CLOSE (3)
+	 • CLONE (4)*/
+      if (arg2 < 0 || arg2 >= N_CRIDES_A_MONITORITZAR)
 	return -EINVAL;
       sys_call_monitoritzat = arg2;
       break;
     case 2:
       /* RESET_VALORS (arg1=2) Posa a zero els valors del proces que s esta
          analitzant en aquest moment. */
-      reset_valors (proces_monitoritzat);
+      res = reset_valors (proces_monitoritzat);
       break;
     case 3:
       /* RESET_VALORS_TOTS_PROCESSOS (arg1=3) Posa a zero els valors de tots els
@@ -163,13 +174,13 @@ pages_ioctl_dev (struct inode *i, struct file *f, unsigned int arg1,
       reset_tots_valors ();
       break;
     case 4:
-      if (arg2 < -1 || arg2 > N_CRIDES_A_MONITORITZAR)
+      if (arg2 < -1 || arg2 >= N_CRIDES_A_MONITORITZAR)
 	return -EINVAL;
       /* Cal tenir present que si arg2=-1 s activaran totes les sys_calls */
       activar_sys_call (arg2);
       break;
     case 5:
-      if (arg2 < -1 || arg2 > N_CRIDES_A_MONITORITZAR)
+      if (arg2 < -1 || arg2 >= N_CRIDES_A_MONITORITZAR)
 	return -EINVAL;
       /* Cal tenir present que si arg2=-1 es desactivaran totes les sys_calls */
       desactivar_sys_call (arg2);
@@ -179,7 +190,6 @@ pages_ioctl_dev (struct inode *i, struct file *f, unsigned int arg1,
       return -EINVAL;
       break;
     }
- try_module_get(THIS_MODULE);
  module_put(THIS_MODULE);
   return 0;
 }
