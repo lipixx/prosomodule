@@ -24,3 +24,58 @@
    ./jp_huerto
 
 2. Joc de proves de la 2ona part:
+   
+   S'ha creat un fitxer jp_elpayes.c que conté
+   el codi font del joc de proves de la segona part.
+   Consisteix en crear el dispositiu /dev/pages amb
+   mknod, amb major i minor corresponents als que
+   trobem a elpayes.h. Un cop creat el dispositiu
+   es disposa a provar una per una les crides possibles
+   que estan implementades al file_operations del dispositiu.
+   
+   Cada vegada que una prova sigui correcte ens sortirà un
+   Ok. Si ha fallat alguna cosa el programa acaba i mostra
+   un missatge d'error corresponent al pas en que ha fallat.
+
+   - Primer començarem per veure si ens deixa fer un altre
+   open. No ha de deixar ja que hi ha el lock activat.
+   CodiError: 2
+
+   - Continuarem provant el read del proces inicial, que es
+   el procés 1. S'espera obtenir tots els stats a 0 ja que
+   aquest procés sol estar dormit.
+   Codi error: 3   
+
+   - Canviarem el pid del proces que volem monitoritzar a
+   un altre, que serà el del propi joc de proves que ja ens
+   va bé perquè fa crides ell sol.
+   Codi error: 4
+
+   - Canviarem la syscall monitoritzada a un Open. No en provem
+   més perquè és un canvi de variable trivial.
+   Codi error: 5
+
+   - Posteriorment pintarem per pantalla les dades del procés
+   que estem monitoritzant, que és l'actual.
+   Codi error: 6   
+
+   - Resetejarem tots els valors per el procés actual.
+   Codi error: 7
+
+   - Tornarem a mostrar les estadistiques del procés que estem
+   monitoritzant, que ara haura de tenir valors inferiors als
+   presentats a l'anterior pintada.
+   Codi error: 8 
+   
+   - Resetejarem totes les estadistiques de tots els processos
+   del sistema.
+   Codi error: 9 
+     
+   - Desactivem totes les monitoritzacions a crides del sistema.
+   Codi error: 10 
+   
+   - Activem totes les monitoritzacions a crides del sistema.
+   Codi error: 11 
+
+   - Tanquem el dispositiu.
+   Codi error: 12
