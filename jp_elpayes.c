@@ -32,7 +32,7 @@ main ()
   char buffer[50];
   struct pid_stats stats;
 
-  pid_monitoritzat = getpid();
+  pid_monitoritzat = 0;
   error = 0;
 
   //Creem el nou dispositiu amb major 254 i minor 0
@@ -54,13 +54,13 @@ main ()
   if (res < 0)
     goto msg_error;
   print_stats (&stats);
-#if 0 
   pid_monitoritzat = getpid ();
   printf ("Ok\n(ioctl) Canviem a  pid %i:", getpid ());
   res = ioctl (fd, CH_PID, getpid ());
   error++;
   if (res < 0)
     goto msg_error;
+#if 0
   printf ("Ok\n(ioctl) Canviem syscall a OPEN:\n");
   res = ioctl (fd, CH_SYSC, 0);
   error++;
