@@ -54,7 +54,7 @@ main ()
   if (res < 0)
     goto msg_error;
   print_stats (&stats);
-
+#if 0 
   pid_monitoritzat = getpid ();
   printf ("Ok\n(ioctl) Canviem a  pid %i:", getpid ());
   res = ioctl (fd, CH_PID, getpid ());
@@ -106,7 +106,7 @@ main ()
   error++;
   if (res < 0)
     goto msg_error;
-
+#endif
   printf ("Ok\n Joc de proves superat!\n");
 
 msg_error:
