@@ -88,7 +88,7 @@ pages_read_dev (struct file *f, char __user * buffer, size_t s, loff_t * off)
   /*  struct sysc_stats *crida = sysc_info_table[sys_call_monitoritzat];
       IMPROVEMENT?¿
    */  
-  struct pid_stats *info=0;
+  struct pid_stats info;
   size_t mida;
   int resultat;
   //unsigned long size;
@@ -96,7 +96,7 @@ pages_read_dev (struct file *f, char __user * buffer, size_t s, loff_t * off)
   try_module_get(THIS_MODULE);  
 
   resultat =
-    obtenir_estadistiques (proces_monitoritzat, sys_call_monitoritzat, info);
+    obtenir_estadistiques (proces_monitoritzat, sys_call_monitoritzat, &info);
   if (resultat < 0)
     return resultat;
 
