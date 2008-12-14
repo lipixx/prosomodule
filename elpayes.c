@@ -20,18 +20,19 @@ static int __init
 ir_al_huerto_init (void)
 {
   int result;
+  int minor, major;
   printk("abans alloc_chrdev_region");
   result = alloc_chrdev_region (&maj_min, 0, 1, "payes");
   if (result<0){
     printk("ERROR: alloc_chrdev_region");   
  return result;
   }
-  printk("abans register_chrdev_regoin");
+  /*  printk("abans register_chrdev_regoin");
   result = register_chrdev_region (maj_min, 1, "payes");
   if(result<0){
     printk("ERROR: register_chrdev_region");
     return result;
-  }
+    }*/
   printk("abans cdev_alloc");
   new_dev = cdev_alloc ();
   if(new_dev==NULL){
@@ -51,6 +52,10 @@ ir_al_huerto_init (void)
   printk("lock=0");
   lock = 0;
 
+  major=MAJOR(maj_min);
+  minor=MINOR(maj_min);
+  printk("\nMAJOR: %i",major);
+  printk("\nMINOR: %i",minor);
   printk (KERN_DEBUG
 	  "El pages arriba ben descansat a l'hort, preparat per una dura jornada de feina\n");
 
