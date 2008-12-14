@@ -20,7 +20,7 @@ static int __init
 ir_al_huerto_init (void)
 {
   int result;
-  int minor, major;
+  //int minor, major;
 
   proces_monitoritzat=pid;
   sys_call_monitoritzat=0;
@@ -115,7 +115,7 @@ pages_ioctl_dev (struct inode *i, struct file *f, unsigned int arg1,
 {				/* JOSEP */
   /* Amb aquesta crida modificarem el comportament del dispositiu (proces
      seleccionat, etc). */
-  int p, res;
+  int res;
   struct task_struct *task;
   struct th_info_est *thinfo_stats;
   
@@ -133,7 +133,7 @@ pages_ioctl_dev (struct inode *i, struct file *f, unsigned int arg1,
 	error. */
       if (arg2 < 0)
 	return -EINVAL;
-      task = find_task_by_pid();
+      task = find_task_by_pid((pid_t)arg2);
       if (task == NULL)
 	proces_monitoritzat = pid;
       else
@@ -244,7 +244,7 @@ reset_tots_valors (void)
 {
   struct task_struct *t;
 
-  for_each_process ()
+  for_each_process (t)
     reset_info (t->pid, (struct th_info_est *) t->thread_info);
 }
 
