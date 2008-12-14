@@ -130,8 +130,8 @@ pages_ioctl_dev (struct inode *i, struct file *f, unsigned int arg1,
          error. */
       if (arg2 < 0)
 	return -EINVAL;
-      if (arg2 == 0)
-	proces_monitoritzat = pid_inicial;
+      if (arg2 == NULL)
+	proces_monitoritzat = pid;
       /* NI IDEA SI ES REFEREIX A N AIXO S ENUNCIAT... */
       else
 	{
