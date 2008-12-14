@@ -52,7 +52,9 @@ comprar_huerto_init (void)
       t = find_task_by_pid (pid_inicial);
       printk (KERN_DEBUG "El pid no existex, s'agafa el default 1");
     }
+
   pid=pid_inicial;/* Feim una copia per accedir des de el payes */
+  
   reset_info (pid_inicial, (struct th_info_est *) t->thread_info);
   printk (KERN_DEBUG "MiHuerto: Loaded\n");
 
