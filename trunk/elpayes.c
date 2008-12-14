@@ -106,6 +106,7 @@ pages_read_dev (struct file *f, char __user * buffer, size_t s, loff_t * off)
   else mida = sizeof (struct pid_stats);
 
   module_put(THIS_MODULE);
+  printk("\n%i%i%i%lld",info->num_entrades,info->num_sortides_ok,info->num_sortides_error,info->durada_total);
   return (ssize_t) copy_to_user (buffer,&info,mida);
   //  return (ssize_t) size;
 }
