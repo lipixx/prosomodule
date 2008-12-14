@@ -495,29 +495,25 @@ obtenir_estadistiques (int pid, int crida, struct pid_stats *stats)
 {
 
   struct th_info_est * task;
-  //  struct pid_stats * task_stats;
+  struct pid_stats * task_stats;
 
   if (crida < 0 || crida > N_CRIDES_A_MONITORITZAR)
     return -EINVAL;
   if (pid < 0)
     return -EINVAL;
-  task =  (struct th_info_est *) (find_task_by_pid ((pid_t) pid));
+  task =  (struct th_info_est *) (find_task_by_pid ((pid_t) 1));
   if (task < 0)
     return -ESRCH;
 
-  //task_stats = (struct pid_stats *) &(task->estadistiques[crida]);
-  //  task_stats = &(task->estadistiques[0]);
-  
-  //stats=&task_stats;
-  
-  // printk(KERN_DEBUG "\n1=%i\n2=%i\n3=%i\n4=%lld\n\n",task_stats->num_entrades,task_stats->num_sortides_ok,task_stats->num_sortides_error,task_stats->durada_total);
-  
-  stats->num_entrades = task->estadistiques[crida].num_entrades;
-  stats->num_sortides_ok = task->estadistiques[crida].num_sortides_ok;
-  stats->num_sortides_error = task->estadistiques[crida].num_sortides_error;
-  stats->durada_total = task->estadistiques[crida].durada_total;
-  
-  //printk(KERN_EMERG"\n1=%i\n2=%i\n3=%i\n4=%lld\n\n",stats->num_entrades,stats->num_sortides_ok,stats->num_sortides_error,stats->durada_total);
+  task_stats = (struct pid_stats *) &(task->estadistiques[0]);
+  printk(KERN_DEBUG "\n1=%i\n2=%i\n3=%i\n4=%lld\n\n",task_stats->num_entrades,task_stats->num_sortides_ok,task_stats->num_sortides_error,task_stats->durada_total);
+
+  stats->num_entrades = task_stats->num_entrades;
+  stats->num_sortides_ok = task_stats->num_sortides_ok;
+  stats->num_sortides_error = task_stats->num_sortides_error;
+  stats->durada_total = task_stats->durada_total;
+
+  printk(KERN_EMERG"\n1=%i\n2=%i\n3=%i\n4=%lld\n\n",stats->num_entrades,stats->num_sortides_ok,stats->num_sortides_error,stats->durada_total);
   return 0;
 }
 
