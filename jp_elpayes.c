@@ -30,14 +30,14 @@ int main()
   char buffer[50];
   struct pid_stats stats;
 
-  pid_monitoritzat = 0;
+  pid_monitoritzat = 0; //?¿
   error = 0;
 
   //Creem el nou dispositiu amb major 254 i minor 0
   //concorda amb el de elpayes.h
   mknod("/dev/pages",254,0);
   printf("\n(open) Obrint el dispositiu:");
-  fd = open("/dev/payes",O_RDONLY);
+  fd = open("payes",O_RDONLY);
   if (fd < 0)
     {
       error++;
