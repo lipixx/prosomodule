@@ -10,7 +10,7 @@
 int pid_monitoritzat;
 
 void
-print_stats (struct pid_stats *pidstats)
+print_stats (struct pid_stats * pidstats)
 {
   //Aquesta funcio mes envant podria rebre un parametre
   //diferent per imprimir mes estadistiques. P.ex un vector
@@ -55,26 +55,26 @@ main ()
     goto msg_error;
   print_stats (&stats);
   pid_monitoritzat = getpid ();
-  printf ("Ok\n(ioctl) Canviem a  pid %i:", getpid ());
-  res = ioctl (fd, CH_PID, getpid ());
+#if 0 
+ printf ("Ok\n(ioctl) Canviem a  pid %i:", pid_monitoritzat);
+  res = ioctl (fd, CH_PID, pid_monitoritzat);
   error++;
   if (res < 0)
     goto msg_error;
-#if 0
   printf ("Ok\n(ioctl) Canviem syscall a OPEN:\n");
   res = ioctl (fd, CH_SYSC, 0);
   error++;
   if (res < 0)
     goto msg_error;
-  printf ("Ok\n(read) Pintem les dades del proces %i:", getpid ());
+  printf ("Ok\n(read) Pintem les dades del proces %i:", pid_monitoritzat);
   res = read (fd, &stats, sizeof (struct pid_stats));
   error++;
   if (res < 0)
     goto msg_error;
   print_stats (&stats);
 
-  printf ("Ok\n(ioctl) Resetejem vals del proces %i:", getpid ());
-  res = ioctl (fd, RESET_VALS, getpid ());
+  printf ("Ok\n(ioctl) Resetejem vals del proces %i:", pid_monitoritzat);
+  res = ioctl (fd, RESET_VALS, pid_monitoritzat);
   error++;
   if (res < 0)
     goto msg_error;
