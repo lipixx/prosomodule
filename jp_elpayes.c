@@ -28,7 +28,7 @@ int
 main ()
 {
   short int error;
-  int fd, res;
+  int fd, fd2, res;
   char buffer[50];
   struct pid_stats stats;
 
@@ -44,9 +44,9 @@ main ()
   if (fd < 0)
     goto msg_error;
   printf ("Ok\n(open) Tornant a provar amb error:");
-  fd = open ("/dev/payes", O_RDONLY);
+  fd2 = open ("/dev/payes", O_RDONLY);
   error++;
-  if (fd >= 0)
+  if (fd2 >= 0)
     goto msg_error;
   printf ("Ok\n(read) Llegim dades del pid_inicial:");
   res = read (fd, &stats, sizeof (struct pid_stats));
