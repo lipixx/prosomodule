@@ -22,38 +22,41 @@ ir_al_huerto_init (void)
   int result;
   //int minor, major;
 
-  proces_monitoritzat=pid;
-  sys_call_monitoritzat=0;
+  proces_monitoritzat = pid;
+  sys_call_monitoritzat = 0;
 
   /* result = alloc_chrdev_region (&maj_min, 0, 1, "payes");
-  if (result<0){
-    printk("ERROR: alloc_chrdev_region");   
- return result;
- }*/
-  maj_min = MKDEV(MAJ, MIN);
+     if (result<0){
+     printk("ERROR: alloc_chrdev_region");   
+     return result;
+     } */
+  maj_min = MKDEV (MAJ, MIN);
   result = register_chrdev_region (maj_min, 1, "payes");
-  if(result<0){
-    printk("ERROR: register_chrdev_region");
-    return result;
+  if (result < 0)
+    {
+      printk ("ERROR: register_chrdev_region");
+      return result;
     }
   new_dev = cdev_alloc ();
-  if(new_dev==NULL){
-    printk("ERROR: cdev_alloc");
-    return -1;
-  }
+  if (new_dev == NULL)
+    {
+      printk ("ERROR: cdev_alloc");
+      return -1;
+    }
   new_dev->owner = THIS_MODULE;
   new_dev->ops = &file_ops;
-  result= cdev_add (new_dev, maj_min, 1);
-  if(result<0){
-    printk("ERROR: cdev_add");
-    return result;
-  }
-  lock = 1;
+  result = cdev_add (new_dev, maj_min, 1);
+  if (result < 0)
+    {
+      printk ("ERROR: cdev_add");
+      return result;
+    }
+  lock = 0;
 
   /*major=MAJOR(maj_min);
-  minor=MINOR(maj_min);
-  printk("\nMAJMIN: %i %i\n",major,minor);
-  */
+     minor=MINOR(maj_min);
+     printk("\nMAJMIN: %i %i\n",major,minor);
+   */
   printk (KERN_DEBUG
 	  "El pages arriba ben descansat a l'hort, preparat per una dura jornada de feina\n");
 
@@ -84,14 +87,11 @@ pages_read_dev (struct file *f, char __user * buffer, size_t s, loff_t * off)
      sizeof(struct t_info). */
 
   /*  struct sysc_stats *crida = sysc_info_table[sys_call_monitoritzat];
-      IMPROVEMENT?¿
-   */  
+     IMPROVEMENT?¿
+   */
   struct pid_stats info;
   size_t mida;
   int resultat;
-  //unsigned long size;
-
-  //try_module_get(THIS_MODULE);  
 
   resultat =
     obtenir_estadistiques (proces_monitoritzat, sys_call_monitoritzat, &info);
@@ -100,14 +100,16 @@ pages_read_dev (struct file *f, char __user * buffer, size_t s, loff_t * off)
 
   if (s < 0)
     return -EINVAL;
-  if(s < sizeof (struct pid_stats)) mida = s;
-  else mida = sizeof (struct pid_stats);
+  if (s < sizeof (struct pid_stats))
+    mida = s;
+  else
+    mida = sizeof (struct pid_stats);
 
 
-  printk(KERN_DEBUG"\nhola\n%i%i%i%lld",info.num_entrades,info.num_sortides_ok,info.num_sortides_error,info.durada_total);
-  //module_put(THIS_MODULE);
-  return (ssize_t) copy_to_user (buffer,&info,mida);
-  //  return (ssize_t) size;
+  printk (KERN_DEBUG "\nhola\n%i%i%i%lld", info.num_entrades,
+	  info.num_sortides_ok, info.num_sortides_error, info.durada_total);
+
+  return (ssize_t) copy_to_user (buffer, &info, mida);
 }
 
 int
@@ -119,22 +121,17 @@ pages_ioctl_dev (struct inode *i, struct file *f, unsigned int arg1,
   int res;
   struct task_struct *task;
   struct th_info_est *thinfo_stats;
-  
-  //try_module_get(THIS_MODULE);
-  
-  /*
-    PREGUNTA:   NECESSITAM FER CAP COPY_FROM_USER ?¿ per agafar es parametres o ho podem fer a saco?
-  */
+
   switch (arg1)
     {
     case 0:
       /*CANVI PROCES (arg1=0) El parametre arg2 indica, per referencia, el nou
-	identificador de proces que cal analitzar. Si el punter es NULL, vol dir que cal
-	tornar al proces que ha realitzat l open. Si el proces no existeix cal retornar
-	error. */
+         identificador de proces que cal analitzar. Si el punter es NULL, vol dir que cal
+         tornar al proces que ha realitzat l open. Si el proces no existeix cal retornar
+         error. */
       if (arg2 < 0)
 	return -EINVAL;
-      task = find_task_by_pid((pid_t)arg2);
+      task = find_task_by_pid ((pid_t) arg2);
       if (task == NULL)
 	proces_monitoritzat = pid;
       else
@@ -142,24 +139,23 @@ pages_ioctl_dev (struct inode *i, struct file *f, unsigned int arg1,
 	  task = find_task_by_pid ((pid_t) arg2);
 	  if (task == NULL)
 	    return -ESRCH;
-	  
+
 	  thinfo_stats = (struct th_info_est *) task;
-	  //p = current_thread_info ()->task->pid;
-	  
+
 	  if (arg2 != thinfo_stats->pid)
-	    reset_info ((pid_t)arg2, thinfo_stats);
-	  
+	    reset_info ((pid_t) arg2, thinfo_stats);
+
 	  proces_monitoritzat = arg2;
 	}
       break;
     case 1:
       /* CANVI SYSCALL (arg1=1) Permet canviar la crida de la que consultem les
-	 estadistiques. El parametre arg2 indica:
-	 • OPEN (0)
-	 • WRITE (1)
-	 • LSEEK (2)
-	 • CLOSE (3)
-	 • CLONE (4)*/
+         estadistiques. El parametre arg2 indica:
+         • OPEN (0)
+         • WRITE (1)
+         • LSEEK (2)
+         • CLOSE (3)
+         • CLONE (4) */
       if (arg2 < 0 || arg2 >= N_CRIDES_A_MONITORITZAR)
 	return -EINVAL;
       sys_call_monitoritzat = arg2;
@@ -191,7 +187,6 @@ pages_ioctl_dev (struct inode *i, struct file *f, unsigned int arg1,
       return -EINVAL;
       break;
     }
-  //module_put(THIS_MODULE);
   return 0;
 }
 
@@ -199,25 +194,22 @@ int
 pages_open_dev (struct inode *i, struct file *f)
 {
 
-  //try_module_get(THIS_MODULE);
-  printk("\nEN FELIP ES UN PUTA GAY DE MERDA\n lock: %i",lock);
-  if (lock!=0) return -EPERM;
-  if (current->uid!=0) return -EACCES;
+  if (lock != 0)
+    return -EPERM;
+  if (current->uid != 0)
+    return -EACCES;
   lock++;
 
-  // module_put(THIS_MODULE);
-   
-  return 0;  
-}   
+  return 0;
+}
 
 int
 pages_release_dev (struct inode *i, struct file *f)
 {
-  //try_module_get(THIS_MODULE);
-  if (!lock) return -EPERM;
-  lock--;
 
-  //module_put(THIS_MODULE);
+  if (!lock)
+    return -EPERM;
+  lock--;
 
   return 0;
 }
@@ -225,7 +217,7 @@ pages_release_dev (struct inode *i, struct file *f)
 int
 reset_valors (pid_t pid)
 {
-  struct task_struct * t;
+  struct task_struct *t;
 
   if (pid < 0)
     return -EINVAL;
@@ -276,11 +268,6 @@ desactivar_sys_call (int quina)
       desactivar_monitoritzacio (i);
   return 0;
 }
-
-//Funcio inutil de moment creada per en felip moll marques
-//i dictada per en josep marti pascual el rei de les funcions
-//estupides i sense sentit i inutils, i que repetint ada es fi de puta
-//te un pute vuid.
 
 /*void
 imprimir_estadistiques_sysc (int sysc)

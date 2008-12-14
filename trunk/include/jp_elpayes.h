@@ -5,7 +5,8 @@
 #define ACT_SYSC 4
 #define DEACT_SYSC 5
 
-struct pid_stats{
+struct pid_stats
+{
   int num_entrades;
   int num_sortides_ok;
   int num_sortides_error;
