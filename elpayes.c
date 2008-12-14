@@ -5,7 +5,7 @@
 #include <linux/cdev.h>
 #include <linux/fs.h>
 #include <linux/sched.h>
-#include <linux/errno.h> /* ?¿?¿? */
+#include <linux/errno.h>
 #include "include/mihuerto.h"
 #include "include/elpayes.h"
 
@@ -222,9 +222,8 @@ reset_valors (pid_t pid)
   t = find_task_by_pid (pid);
 
   if (t < 0)
-    return -EINVAL;		//REPASSAR AQUEST VALOR DE RET
-  /* QUE TROBES SI: return -ESRCH ?¿
-     PD: bsos */
+    return -ESRCH;
+
   reset_info (pid, (struct th_info_est *) t->thread_info);
 
   return 0;
@@ -235,15 +234,8 @@ reset_tots_valors (void)
 {
   struct task_struct *t;
 
-  for_each_process (t)
-  {
-    /* JA SAPS QUE AQUESTES COSES TAN LLETJES I POC EFICIENTS ME MATEN
-       NO M ACABA DE CONVENSER... */
-
-    /* FORSA BARSAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA!!!!!!!!!!!*/
+  for_each_process ()
     reset_info (t->pid, (struct th_info_est *) t->thread_info);
-    //    t->task->pid
-}
 }
 
 int
