@@ -199,10 +199,6 @@ pages_open_dev (struct inode *i, struct file *f)
    
   return 0;  
 }   
-int sys_release_dev(struct inode *i, struct file *f)
-{
-  return 0;
-}
 
 int
 pages_release_dev (struct inode *i, struct file *f)
