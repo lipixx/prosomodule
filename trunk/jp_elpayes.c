@@ -30,105 +30,83 @@ int main()
   char buffer[50];
   struct pid_stats stats;
 
-  pid_monitoritzat = 0; //?¿
+  pid_monitoritzat = 0;
   error = 0;
 
   //Creem el nou dispositiu amb major 254 i minor 0
   //concorda amb el de elpayes.h
-  mknod("/dev/pages",254,0);
+  mknod("/dev/payes",254,0);
   printf("\n(open) Obrint el dispositiu:");
-  fd = open("payes",O_RDONLY);
+  fd = open("/dev/payes",O_RDONLY);
+  error++;
   if (fd < 0)
-    {
-      error++;
-      goto msg_error;
-    }
-
+    goto msg_error;
   printf("Ok\n(open) Tornant a provar amb error:");
   fd = open("/dev/payes",O_RDONLY);
+  error++;
   if (fd >= 0)
-    {
-      error++;
-      goto msg_error;
-    }
+    goto msg_error;
   printf("Ok\n(read) Llegim dades del pid_inicial:");
   res = read(fd,&stats,sizeof(struct pid_stats));
+  error++;
   if (res < 0)
-    {
-      error++;
       goto msg_error;
-    }
   print_stats(&stats);
   
   pid_monitoritzat = getpid();
   printf("Ok\n(ioctl) Canviem a  pid %i:",getpid());
   res = ioctl(fd,CH_PID,getpid());
+  error++;
   if (res < 0)
-    {
-      error++;
-      goto msg_error;
-    }
+    goto msg_error;
   printf("Ok\n(ioctl) Canviem syscall a OPEN:\n");
   res = ioctl(fd,CH_SYSC,0);
+  error++;
   if (res < 0)
-    {
-      error++;
-      goto msg_error;
-    }
+    goto msg_error;
   printf("Ok\n(read) Pintem les dades del proces %i:",getpid());
   res = read(fd,&stats,sizeof(struct pid_stats));
+  error++;
   if (res < 0)
-    {
-      error++;
-      goto msg_error;
-    }
+    goto msg_error;
   print_stats(&stats);
   
   printf("Ok\n(ioctl) Resetejem vals del proces %i:",getpid());
   res = ioctl(fd,RESET_VALS,getpid());
+  error++;
   if (res < 0)
-    {
-      error++;
-      goto msg_error;
-    }
+    goto msg_error;
   printf("Ok\n(read) Pintem valors resetejats (no estaran a 0):");
   res = read(fd,&stats,sizeof(struct pid_stats));
+  error++;
   if (res < 0)
-    {
-      error++;
-      goto msg_error;
-    }
+    goto msg_error;
   print_stats(&stats);
   printf("Ok\n(ioctl) Resetejem totes les estadistiques dels processos:");
   res = ioctl(fd,RESET_ALL_VALS,0);
+  error++;
   if (res < 0)
-    {
-      error++;
-      goto msg_error;
-    }
+    goto msg_error;
   printf("Ok\n(ioctl) Desactivar totes les syscalls:");
   res = ioctl(fd,DEACT_SYSC,-1);
+  error++;
   if (res < 0)
-    {
-      error++;
-      goto msg_error;
-    }
+    goto msg_error;
+  
   printf("Ok\n(ioctl) Activant totes les syscalls:");
   res = ioctl(fd,ACT_SYSC,-1);
+  error++;
   if (res < 0)
-    {
-      error++;
-      goto msg_error;
-    }
+    goto msg_error;
+  
   printf("Ok\n(release) Tancant el dispositiu:");
   res = close(fd);
+  error++;
   if (res < 0)
-    {
-      error++;
-      goto msg_error;
-    }
+    goto msg_error;
+  
   printf("Ok\n Joc de proves superat!\n");
-
+  
  msg_error:
   if (error != 0) printf("ERR\nHi ha hagut un error (00%i)\n",error);
   exit(0);
