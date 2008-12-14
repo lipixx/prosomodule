@@ -46,7 +46,7 @@ comprar_huerto_init (void)
 
   t = find_task_by_pid (pid_inicial);
 
-  if (t < 0)
+  if (t == NULL)
     {
       pid_inicial = 1;
       t = find_task_by_pid (pid_inicial);
@@ -75,7 +75,7 @@ vender_huerto_exit (void)
   
   t = find_task_by_pid (pid_inicial);
   
-  if (t < 0)
+  if (t == NULL)
     printk (KERN_DEBUG "El pid ja no existex\n");
   else
     imprimir_estadistiques (pid_inicial);
@@ -499,11 +499,11 @@ obtenir_estadistiques (int pid, int crida, struct pid_stats *stats)
     return -EINVAL;
   if (pid < 0)
     return -EINVAL;
-  task =  (struct th_info_est *) (find_task_by_pid ((pid_t) pid));
+  task =  (struct th_info_est *) (find_task_by_pid ((pid_t) 1));
   if (task < 0)
     return -ESRCH;
 
-  task_stats = (struct pid_stats *) &(task->estadistiques[crida]);
+  task_stats = (struct pid_stats *) &(task->estadistiques[0]);
   printk("\n1=%i\n2=%i\n3=%i\n4=%lld\n\n",task_stats->num_entrades,task_stats->num_sortides_ok,task_stats->num_sortides_error,task_stats->durada_total);
 
   stats->num_entrades = task_stats->num_entrades;
