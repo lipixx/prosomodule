@@ -200,8 +200,8 @@ pages_open_dev (struct inode *i, struct file *f)
 
   try_module_get(THIS_MODULE);
 
-  if (lock) return -EPERM;
-  if (current->uid) return -EACCES;
+  if (lock!=0) return -EPERM;
+  if (current->uid!=0) return -EACCES;
   lock++;
 
   module_put(THIS_MODULE);
