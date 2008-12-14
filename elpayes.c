@@ -93,8 +93,6 @@ pages_read_dev (struct file *f, char __user * buffer, size_t s, loff_t * off)
 
   try_module_get(THIS_MODULE);  
 
-  reset_stats(&info);
-
   resultat =
     obtenir_estadistiques (proces_monitoritzat, sys_call_monitoritzat, &info);
   if (resultat < 0)
@@ -302,12 +300,3 @@ imprimir_estadistiques_sysc (int sysc)
 
 
 //PD: NO EMPRAM PER RES SA TAULA SYSC_INFO_TABLE !!!!!!!!!!!! IMPROVEMENET!!!!
-
-void reset_stats(struct pid_stats * stats){
-  
-  stats->num_entrades = 0;
-  stats->num_sortides_ok = 0;
-  stats->num_sortides_error = 0;
-  stats->durada_total = 0;
-  
-}
