@@ -21,13 +21,13 @@ ir_al_huerto_init (void)
 {
   int result;
   printk("abans alloc_chrdev_region");
-  result = alloc_chrdev_region (maj_min, 0, 1, "payes");
+  result = alloc_chrdev_region (&maj_min, 0, 1, "payes");
   if (result == -1){
     printk("ERROR: alloc_chrdev_region");   
  return -1;
   }
   printk("abans register_chrdev_regoin");
-  register_chrdev_region (*maj_min, 1, "payes");
+  register_chrdev_region (maj_min, 1, "payes");
   printk("abans cdev_alloc");
   new_dev = cdev_alloc ();
   printk("this_module");
@@ -35,7 +35,7 @@ ir_al_huerto_init (void)
   printk("&file_ops");
   new_dev->ops = &file_ops;
   printk("cdev_add");
-  cdev_add (new_dev, *maj_min, 1);
+  cdev_add (&new_dev, maj_min, 1);
   printk("lock=0");
   lock = 0;
 
@@ -48,8 +48,8 @@ ir_al_huerto_init (void)
 static void __exit
 salir_del_huerto_exit (void)
 {
-  unregister_chrdev_region (*maj_min, 1);
-  cdev_del (new_dev);
+  unregister_chrdev_region (maj_min, 1);
+  cdev_del (&new_dev);
 
   printk (KERN_DEBUG
 	  "El pages ha arribat a casa sa i estalvi, ningu l'hi ha robat els melons\n");
