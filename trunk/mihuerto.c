@@ -48,14 +48,11 @@ comprar_huerto_init (void)
 
   if (t < 0)
     {
-      /*es necessari????????????
-         ?????????????????
-         ????????????? */
       pid_inicial = 1;
       t = find_task_by_pid (pid_inicial);
       printk (KERN_DEBUG "El pid no existex, s'agafa el default 1");
     }
-
+  pid=pid_inicial;/* Feim una copia per accedir des de el payes */
   reset_info (pid_inicial, (struct th_info_est *) t->thread_info);
   printk (KERN_DEBUG "MiHuerto: Loaded\n");
 
@@ -74,6 +71,12 @@ vender_huerto_exit (void)
   sys_call_table[POS_SYSCALL_CLONE] = sys_call_table_originals[CLONE];
   sys_call_table[POS_SYSCALL_LSEEK] = sys_call_table_originals[LSEEK];
 
+  t = find_task_by_pid (pid_inicial);
+  
+  if (t < 0)
+    {
+     printk (KERN_DEBUG "El pid ja no existex\n");
+    }else
   imprimir_estadistiques (pid_inicial);
 
   printk (KERN_DEBUG "MiHuerto: Unloaded\n");
