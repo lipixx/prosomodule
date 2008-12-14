@@ -500,11 +500,7 @@ obtenir_estadistiques (int pid, int crida, struct pid_stats *stats)
     return -ESRCH;
   task = (struct th_info_est *) t->thread_info;
 
-  task_stats = &(struct pid_stats *) (task->estadistiques[crida]);
-
-
-	  task_stats->num_entrades, task_stats->num_sortides_ok,
-	  task_stats->num_sortides_error, task_stats->durada_total);
+  task_stats = &((struct pid_stats *) (task->estadistiques[crida]));
 
   stats->num_entrades = task_stats->num_entrades;
   stats->num_sortides_ok = task_stats->num_sortides_ok;
