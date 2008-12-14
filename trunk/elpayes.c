@@ -24,7 +24,7 @@ ir_al_huerto_init (void)
 
   proces_monitoritzat = pid;
   sys_call_monitoritzat = 0;
-
+  pid_open = 1;
   /* result = alloc_chrdev_region (&maj_min, 0, 1, "payes");
      if (result<0){
      printk("ERROR: alloc_chrdev_region");   
@@ -111,7 +111,7 @@ pages_read_dev (struct file *f, char __user * buffer, size_t s, loff_t * off)
 int
 pages_ioctl_dev (struct inode *i, struct file *f, unsigned int arg1,
 		 unsigned long arg2)
-{				/* JOSEP */
+{
   /* Amb aquesta crida modificarem el comportament del dispositiu (proces
      seleccionat, etc). */
   int res;
@@ -127,16 +127,17 @@ pages_ioctl_dev (struct inode *i, struct file *f, unsigned int arg1,
          error. */
       if (arg2 < 0)
 	return -EINVAL;
+
       task = find_task_by_pid ((pid_t) arg2);
+
       if (task == NULL)
-	proces_monitoritzat = pid;
+	{
+	  proces_monitoritzat = pid_open;
+	  return -ESRCH;
+	}
       else
 	{
-	  task = find_task_by_pid ((pid_t) arg2);
-	  if (task == NULL)
-	    return -ESRCH;
-
-	  thinfo_stats = (struct th_info_est *) task;
+	  thinfo_stats = (struct th_info_est *) task->thread_info;
 
 	  if (arg2 != thinfo_stats->pid)
 	    reset_info ((pid_t) arg2, thinfo_stats);
@@ -195,7 +196,7 @@ pages_open_dev (struct inode *i, struct file *f)
   if (current->uid != 0)
     return -EACCES;
   lock++;
-
+  pid_open = current->pid;
   return 0;
 }
 
@@ -206,24 +207,24 @@ pages_release_dev (struct inode *i, struct file *f)
   if (!lock)
     return -EPERM;
   lock--;
-
+  pid_open = 0;
   return 0;
 }
 
 int
-reset_valors (pid_t pid)
+reset_valors (pid_t pidk)
 {
   struct task_struct *t;
 
-  if (pid < 0)
+  if (pidk < 0)
     return -EINVAL;
 
-  t = find_task_by_pid (pid);
+  t = find_task_by_pid (pidk);
 
   if (t < 0)
     return -ESRCH;
 
-  reset_info (pid, (struct th_info_est *) t->thread_info);
+  reset_info (pidk, (struct th_info_est *) t->thread_info);
 
   return 0;
 }

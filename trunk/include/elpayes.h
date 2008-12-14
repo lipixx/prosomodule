@@ -2,6 +2,7 @@
 #define MIN 0
 
 short int lock;
+int pid_open;
 int proces_monitoritzat;
 int sys_call_monitoritzat;
 
