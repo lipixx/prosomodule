@@ -34,7 +34,6 @@ proso_get_cycles (void)
 
 struct pid_stats
 {
-  //int pid;
   int num_entrades;
   int num_sortides_ok;
   int num_sortides_error;
@@ -60,9 +59,6 @@ struct th_info_est
 la sys_call_table mitjansant les crides que nosaltres esteim monitoritzant */
 int taula_de_constants[] = { 5, 6, 4, 120, 19 };
 
-//static int __init comprar_huerto_init (void);
-//static void __exit vender_huerto_exit (void);
-
 
 long sys_open_local (const char __user * filename, int flags, int mode);
 long sys_close_local (unsigned int fd);
@@ -76,5 +72,4 @@ void activar_monitoritzacio (int num_crida);
 void desactivar_monitoritzacio (int num_crida);
 void reset_info (int pid, struct th_info_est *tinfo_est);
 void imprimir_estadistiques (int pid);
-int obtenir_estadistiques (int pid, int crida, struct pid_stats * stats);
-
+int obtenir_estadistiques (int pid, int crida, struct pid_stats *stats);
