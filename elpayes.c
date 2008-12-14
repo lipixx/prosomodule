@@ -25,17 +25,17 @@ ir_al_huerto_init (void)
   proces_monitoritzat=pid;
   sys_call_monitoritzat=0;
 
-  result = alloc_chrdev_region (&maj_min, 0, 1, "payes");
+  /* result = alloc_chrdev_region (&maj_min, 0, 1, "payes");
   if (result<0){
     printk("ERROR: alloc_chrdev_region");   
  return result;
-  }
-  /*  printk("abans register_chrdev_region");
+ }*/
+  maj_min = MKDEV(MAJ, MIN);
   result = register_chrdev_region (maj_min, 1, "payes");
   if(result<0){
     printk("ERROR: register_chrdev_region");
     return result;
-    }*/
+    }
   new_dev = cdev_alloc ();
   if(new_dev==NULL){
     printk("ERROR: cdev_alloc");
