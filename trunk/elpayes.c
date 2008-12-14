@@ -20,15 +20,23 @@ static int __init
 ir_al_huerto_init (void)
 {
   int result;
-
+  printk("abans alloc_chrdev_region");
   result = alloc_chrdev_region (maj_min, 0, 1, "payes");
-  if (result == -1)
-    return -1;
+  if (result == -1){
+    printk("ERROR: alloc_chrdev_region");   
+ return -1;
+  }
+  printk("abans register_chrdev_regoin");
   register_chrdev_region (*maj_min, 1, "payes");
+  printk("abans cdev_alloc");
   new_dev = cdev_alloc ();
+  printk("this_module");
   new_dev->owner = THIS_MODULE;
+  printk("&file_ops");
   new_dev->ops = &file_ops;
+  printk("cdev_add");
   cdev_add (new_dev, *maj_min, 1);
+  printk("lock=0");
   lock = 0;
 
   printk (KERN_DEBUG
