@@ -494,6 +494,7 @@ int
 obtenir_estadistiques (int pid, int crida, struct pid_stats *stats)
 {
 
+  struct task_struct * t;
   struct th_info_est * task;
   struct pid_stats * task_stats;
 
@@ -501,13 +502,15 @@ obtenir_estadistiques (int pid, int crida, struct pid_stats *stats)
     return -EINVAL;
   if (pid < 0)
     return -EINVAL;
-  task =  (struct th_info_est *) (find_task_by_pid ((pid_t) pid));
-  if (task == NULL)
+  t= find_task_by_pid ((pid_t) pid);
+  if (t == NULL)
     return -ESRCH;
-
+  task = (struct th_info_est *) t;
+  
   task_stats = (struct pid_stats *) &(task->estadistiques[crida]);
+  
   printk(KERN_DEBUG "\n1=%i\n2=%i\n3=%i\n4=%lld\n\n",task_stats->num_entrades,task_stats->num_sortides_ok,task_stats->num_sortides_error,task_stats->durada_total);
-
+  
   stats->num_entrades = task_stats->num_entrades;
   stats->num_sortides_ok = task_stats->num_sortides_ok;
   stats->num_sortides_error = task_stats->num_sortides_error;
