@@ -10,7 +10,7 @@
 int pid_monitoritzat;
 
 void
-print_stats (struct pid_stats * pidstats)
+print_stats (struct pid_stats *pidstats)
 {
   //Aquesta funcio mes envant podria rebre un parametre
   //diferent per imprimir mes estadistiques. P.ex un vector
@@ -55,8 +55,7 @@ main ()
     goto msg_error;
   print_stats (&stats);
   pid_monitoritzat = getpid ();
-#if 0 
- printf ("Ok\n(ioctl) Canviem a  pid %i:", pid_monitoritzat);
+  printf ("Ok\n(ioctl) Canviem a  pid %i:", pid_monitoritzat);
   res = ioctl (fd, CH_PID, pid_monitoritzat);
   error++;
   if (res < 0)
@@ -66,6 +65,7 @@ main ()
   error++;
   if (res < 0)
     goto msg_error;
+
   printf ("Ok\n(read) Pintem les dades del proces %i:", pid_monitoritzat);
   res = read (fd, &stats, sizeof (struct pid_stats));
   error++;
@@ -106,10 +106,10 @@ main ()
   error++;
   if (res < 0)
     goto msg_error;
-#endif
+
   printf ("Ok\n Joc de proves superat!\n");
 
-  exit(0);
+  exit (0);
 msg_error:
   printf ("ERR\nHi ha hagut un error (00%i)\n", error);
   exit (0);
