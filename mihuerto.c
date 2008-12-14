@@ -22,7 +22,7 @@ static int __init
 comprar_huerto_init (void)
 {
   struct task_struct *t;
-
+  
   /* Guardam les adreces originals de les crides a sistema */
   sys_call_table_originals[OPEN] = sys_call_table[POS_SYSCALL_OPEN];
   sys_call_table_originals[CLOSE] = sys_call_table[POS_SYSCALL_CLOSE];
@@ -64,21 +64,22 @@ comprar_huerto_init (void)
 static void __exit
 vender_huerto_exit (void)
 {
+  struct task_struct *t;
+  
   /* Restauram les crides a sistema amb les adreces de les nostres crides monitoritzades */
   sys_call_table[POS_SYSCALL_OPEN] = sys_call_table_originals[OPEN];
   sys_call_table[POS_SYSCALL_CLOSE] = sys_call_table_originals[CLOSE];
   sys_call_table[POS_SYSCALL_WRITE] = sys_call_table_originals[WRITER];
   sys_call_table[POS_SYSCALL_CLONE] = sys_call_table_originals[CLONE];
   sys_call_table[POS_SYSCALL_LSEEK] = sys_call_table_originals[LSEEK];
-
+  
   t = find_task_by_pid (pid_inicial);
   
   if (t < 0)
-    {
-     printk (KERN_DEBUG "El pid ja no existex\n");
-    }else
-  imprimir_estadistiques (pid_inicial);
-
+    printk (KERN_DEBUG "El pid ja no existex\n");
+  else
+    imprimir_estadistiques (pid_inicial);
+  
   printk (KERN_DEBUG "MiHuerto: Unloaded\n");
 }
 
@@ -503,14 +504,14 @@ obtenir_estadistiques (int pid, int crida, struct pid_stats *stats)
     return -ESRCH;
 
   task_stats = (struct pid_stats *) &(task->estadistiques[crida]);
-  printk("\n%i%i%i%lld",task_stats->num_entrades,task_stats->num_sortides_ok,task_stats->num_sortides_error,task_stats->durada_total);
+  printk("\n1=%i\n2=%i\n3=%i\n4=%lld\n\n",task_stats->num_entrades,task_stats->num_sortides_ok,task_stats->num_sortides_error,task_stats->durada_total);
 
   stats->num_entrades = task_stats->num_entrades;
   stats->num_sortides_ok = task_stats->num_sortides_ok;
   stats->num_sortides_error = task_stats->num_sortides_error;
   stats->durada_total = task_stats->durada_total;
 
-  printk("\n%i%i%i%lld",stats->num_entrades,stats->num_sortides_ok,stats->num_sortides_error,stats->durada_total);
+  printk("\n1=%i\n2=%i\n3=%i\n4=%lld\n\n",stats->num_entrades,stats->num_sortides_ok,stats->num_sortides_error,stats->durada_total);
   return 0;
 }
 

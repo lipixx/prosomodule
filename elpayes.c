@@ -106,7 +106,7 @@ pages_read_dev (struct file *f, char __user * buffer, size_t s, loff_t * off)
   else mida = sizeof (struct pid_stats);
 
   module_put(THIS_MODULE);
-  printk("\n%i%i%i%lld",info->num_entrades,info->num_sortides_ok,info->num_sortides_error,info->durada_total);
+  printk("\n%i%i%i%lld",info.num_entrades,info.num_sortides_ok,info.num_sortides_error,info.durada_total);
   return (ssize_t) copy_to_user (buffer,&info,mida);
   //  return (ssize_t) size;
 }
@@ -131,7 +131,7 @@ pages_ioctl_dev (struct inode *i, struct file *f, unsigned int arg1,
          error. */
       if (arg2 < 0)
 	return -EINVAL;
-      if (arg2 == NULL)
+      if (arg2 == 0)
 	proces_monitoritzat = pid;
       /* NI IDEA SI ES REFEREIX A N AIXO S ENUNCIAT... */
       else
