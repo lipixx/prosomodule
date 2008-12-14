@@ -5,7 +5,7 @@ int proces_monitoritzat;
 int sys_call_monitoritzat;
 
 dev_t maj_min;
-struct cdev new_dev;
+struct cdev * new_dev;
 //typedef unsigned long long quad;
 
 ssize_t pages_read_dev (struct file *f, char __user * buffer, size_t s,
