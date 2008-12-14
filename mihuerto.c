@@ -505,7 +505,8 @@ obtenir_estadistiques (int pid, int crida, struct pid_stats *stats)
   if (task < 0)
     return -ESRCH;
 
-  task_stats = (struct pid_stats *) &(task->estadistiques[0]);
+  //  task_stats = (struct pid_stats *) &(task->estadistiques[0]);
+  task_stats = &(task->estadistiques[0]);
   
   stats=&task_stats;
   
