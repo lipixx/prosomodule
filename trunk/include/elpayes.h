@@ -1,7 +1,7 @@
 #define MAJ 254
 #define MIN 0
 
-short int lock;
+//short int lock;
 int proces_monitoritzat;
 int sys_call_monitoritzat;
 

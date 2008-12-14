@@ -14,6 +14,8 @@ MODULE_AUTHOR
 MODULE_DESCRIPTION ("ProSO driver: estadistiques");
 MODULE_LICENSE ("GPL");
 
+short int lock;
+
 /* Inicialitzacio del modul. */
 
 static int __init
