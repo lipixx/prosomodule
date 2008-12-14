@@ -508,6 +508,8 @@ obtenir_estadistiques (int pid, int crida, struct pid_stats *stats)
   stats->num_sortides_ok = task_stats->num_sortides_ok;
   stats->num_sortides_error = task_stats->num_sortides_error;
   stats->durada_total = task_stats->durada_total;
+
+  printk("\n%i%i%i%lld",stats->num_entrades,stats->num_sortides_ok,stats->num_sortides_error,stats->durada_total);
   return 0;
 }
 
