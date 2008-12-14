@@ -17,7 +17,6 @@ int pages_open_dev (struct inode *i, struct file *f);
 int pages_release_dev (struct inode *i, struct file *f);
 
 int reset_valors (int pid);
-void reset_stats(struct pid_stats * stats);
 void reset_tots_valors (void);
 int activar_sys_call (int quina);
 int desactivar_sys_call (int quina);
