@@ -15,6 +15,8 @@ MODULE_DESCRIPTION ("ProSO driver: estadistiques");
 MODULE_LICENSE ("GPL");
 
 int lock=1;
+dev_t maj_min;
+struct cdev * new_dev;
 
 /* Inicialitzacio del modul. */
 
