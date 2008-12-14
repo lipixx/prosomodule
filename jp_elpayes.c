@@ -32,7 +32,7 @@ main ()
   char buffer[50];
   struct pid_stats stats;
 
-  pid_monitoritzat = 0;
+  pid_monitoritzat = getpid();
   error = 0;
 
   //Creem el nou dispositiu amb major 254 i minor 0
@@ -109,8 +109,8 @@ main ()
 #endif
   printf ("Ok\n Joc de proves superat!\n");
 
+  exit(0);
 msg_error:
-  if (error != 0)
-    printf ("ERR\nHi ha hagut un error (00%i)\n", error);
+  printf ("ERR\nHi ha hagut un error (00%i)\n", error);
   exit (0);
 }
