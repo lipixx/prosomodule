@@ -1,4 +1,6 @@
 //#include "mihuerto.h"
+#define MAJ 254
+#define MIN 0
 
 char lock;
 int proces_monitoritzat;
