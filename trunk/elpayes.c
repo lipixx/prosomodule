@@ -21,6 +21,10 @@ ir_al_huerto_init (void)
 {
   int result;
   int minor, major;
+
+  proces_monitoritzat=pid;
+  sys_call_monitoritzat=0;
+
   printk("abans alloc_chrdev_region");
   result = alloc_chrdev_region (&maj_min, 0, 1, "payes");
   if (result<0){

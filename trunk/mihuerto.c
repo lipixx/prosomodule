@@ -400,7 +400,7 @@ reset_info (pid_t pid, struct th_info_est *est)
 
   est->pid = pid;
 
-  for (i = 0; i <= N_CRIDES_A_MONITORITZAR + 1; i++)
+  for (i = 0; i <= N_CRIDES_A_MONITORITZAR; i++)
     {
 
       pidstats = &(est->estadistiques[i]);
