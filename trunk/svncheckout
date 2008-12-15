@@ -1,0 +1,142 @@
+#!/bin/bash
+# Interficie per svn checkout
+# Veure help_text
+# LiPi - 02/12/2008 - GNU/GPLv3
+
+question_0()
+{
+  echo "La configuracio per defecte es:"
+  echo "@servidor: $SERVIDOR"
+  echo "dir creacio al pwd actual: $DIRCHK"
+  echo "Username: $USERNAME"
+  echo "Password: $PASSWORD"
+  echo ""
+  echo "Respon amb S, N o Enter per default"
+  echo "--------------------------------------"
+  echo ""
+  question_1
+}
+
+question_1()
+{
+    echo "Configuracio per defecte?[n]:"
+    read TMP
+
+    if [ -z $TMP ] || [ $TMP = "n" ] || [ $TMP = "N" ]
+	then  
+	question_3
+    else
+	if [ $TMP != "S" ] && [ $TMP != "s" ]
+	    then 	  
+	    INTENTS=`expr $INTENTS + 1`  
+	    if [ $INTENTS -eq 4 ]
+		then quit
+	    fi
+	    echo ""
+	    echo "Error: N,S,s,n,<enter>.. intent $INTENTS de 3"
+	    question_1
+	fi
+    fi
+    DEFAULT=1
+    procedure_0
+}
+
+procedure_0()
+{
+if [ $DEFAULT -eq 1 ]
+    then
+    echo ""
+    echo ""
+    echo "Es creara un directori de nomes lectura"
+    echo "Comanda svn checkout $SERVIDOR prosomodule-read-only"
+    svn checkout $SERVIDOR prosomodule-read-only
+    exit
+fi
+
+echo ""
+echo ""
+echo "svn checkout $SERVIDOR $DIRCHK --username $USERNAME --password $PASSWORD"
+echo ""
+svn checkout $SERVIDOR $DIRCHK --username $USERNAME --password $PASSWORD
+echo "Successful!"
+exit
+}
+
+question_3()
+{
+    echo "Servidor? [$SERVIDOR]:"
+    read TMP
+    if [ "$TMP" != "" ]
+	then
+	SERVIDOR=$TMP
+    fi
+    
+    echo "On colocar el codi? [$DIRCHK]:"
+    read TMP
+    if [ "$TMP" != "" ]
+	then
+	DIRCHK=$TMP
+    fi
+
+    echo "Username [$USERNAME]:"
+    read TMP
+    if [ "$TMP" != "" ]
+	then
+	USERNAME=$TMP
+    fi
+
+    echo "Password [$PASSWORD]:"
+    read TMP
+    if [ "$TMP" != "" ]
+	then
+	PASSWORD=$TMP
+    fi
+
+    procedure_0
+}
+
+help_text()
+{
+    echo "Aquest script serveix per facilitar l'us de la comanda"
+    echo "svn. Permet fer un checkout triant el servidor, on"
+    echo "col·locar el working copy, definir un login, password,"
+    echo "i aixo es tot."
+}
+
+quit()
+{
+    echo ""
+    echo "End..."
+    exit
+}
+
+##MAIN
+
+INTENTS=1
+DEFAULT=0
+SERVIDOR="https://prosomodule.googlecode.com/svn/trunk/"
+USERNAME=""
+PASSWORD=""
+DIRCHK="prosomodule"
+
+if [ $# -gt 1 ]
+then
+    echo "Us: svncheckout [-h]"
+    quit
+else
+    if [ $# -eq 1 ] && [ $1 == "-h" ]
+    then
+	help_text
+	quit
+    else
+	if [ $# -eq 1 ]
+        then
+	    echo "Us: svncheckout [-h]"
+	    quit
+	fi
+    fi
+fi
+
+echo "Beginning"
+question_0
+exit
